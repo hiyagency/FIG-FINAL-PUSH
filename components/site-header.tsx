@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, MessageCircle, PhoneCall, X } from "lucide-react";
+import { Instagram, Menu, MessageCircle, PhoneCall, X } from "lucide-react";
 import { useState } from "react";
 
 import { cn } from "@/lib/fig-utils";
@@ -28,7 +28,7 @@ export function SiteHeader() {
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-7 lg:flex">
+          <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex">
             {navigationLinks.map((item) => (
               <Link
                 key={item.href}
@@ -44,6 +44,16 @@ export function SiteHeader() {
             <a href={businessInfo.primaryPhone.href} className="button-secondary">
               <PhoneCall className="h-4 w-4" />
               Call Now
+            </a>
+            <a
+              href={businessInfo.instagramHref}
+              target="_blank"
+              rel="noreferrer"
+              className="button-secondary"
+              aria-label={`Open FIG Instagram profile @${businessInfo.instagramHandle}`}
+            >
+              <Instagram className="h-4 w-4" />
+              Instagram
             </a>
             <Link href="#contact" className="button-primary">
               Enquire
@@ -65,7 +75,7 @@ export function SiteHeader() {
       <div
         className={cn(
           "overflow-hidden border-t border-slate-200 bg-white transition-[max-height,opacity] duration-300 lg:hidden",
-          menuOpen ? "max-h-[28rem] opacity-100" : "max-h-0 opacity-0"
+          menuOpen ? "max-h-[32rem] opacity-100" : "max-h-0 opacity-0"
         )}
       >
         <div className="container-shell flex flex-col gap-4 py-5">
@@ -80,7 +90,7 @@ export function SiteHeader() {
             </Link>
           ))}
 
-          <div className="mt-2 grid gap-3 sm:grid-cols-2">
+          <div className="mt-2 grid gap-3 sm:grid-cols-3">
             <a href={businessInfo.primaryPhone.href} className="button-secondary">
               <PhoneCall className="h-4 w-4" />
               Call Now
@@ -93,6 +103,15 @@ export function SiteHeader() {
             >
               <MessageCircle className="h-4 w-4" />
               WhatsApp Us
+            </a>
+            <a
+              href={businessInfo.instagramHref}
+              target="_blank"
+              rel="noreferrer"
+              className="button-secondary"
+            >
+              <Instagram className="h-4 w-4" />
+              Instagram
             </a>
           </div>
         </div>

@@ -1,12 +1,9 @@
-import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 import {
-  MissingGoogleSheetsConfigError,
-  appendEnquiryToSheet
-} from "@/lib/google-sheets";
-import { contactFormSchema } from "@/lib/contact-form-schema";
-import { getSiteUrl } from "@/lib/fig-utils";
+  enquiryEndpoint,
+  enquiryPayloadSchema
+} from "@/lib/enquiry-payload";
 
 export const runtime = "nodejs";
 
@@ -22,7 +19,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const parsedPayload = contactFormSchema.safeParse(payload);
+  const parsedPayload = enquiryPayloadSchema.safeParse(payload);
 
   if (!parsedPayload.success) {
     return NextResponse.json(
@@ -36,57 +33,83 @@ export async function POST(request: Request) {
 
   const submission = parsedPayload.data;
 
-  if (submission.website) {
-    return NextResponse.json(
-      { message: "Unable to process this enquiry." },
-      { status: 400 }
-    );
-  }
-
-  const requestHeaders = await headers();
-  const sourcePage =
-    submission.sourcePage?.trim() ||
-    requestHeaders.get("referer") ||
-    `${getSiteUrl()}/`;
-  const userAgent = requestHeaders.get("user-agent") || "Unavailable";
-
   try {
-    await appendEnquiryToSheet({
-      timestamp: new Date().toISOString(),
-      fullName: submission.fullName,
-      phoneNumber: submission.phoneNumber,
-      emailAddress: submission.emailAddress,
-      investmentAmount: submission.investmentAmount,
-      message: submission.message,
-      sourcePage,
-      userAgent
+    const upstreamResponse = await fetch(enquiryEndpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(submission),
+      cache: "no-store"
     });
 
-    return NextResponse.json({
-      message:
-        "Your enquiry has been received. FIG will review it and connect with you soon."
-    });
-  } catch (error) {
-    if (error instanceof MissingGoogleSheetsConfigError) {
-      console.error("Google Sheets configuration missing for FIG enquiries", error);
+    const contentType = upstreamResponse.headers.get("content-type") || "";
+    let upstreamBody: Record<string, unknown> | null = null;
+    let upstreamText = "";
+
+    if (contentType.includes("application/json")) {
+      upstreamBody = (await upstreamResponse.json().catch(() => null)) as
+        | Record<string, unknown>
+        | null;
+    } else {
+      upstreamText = await upstreamResponse.text().catch(() => "");
+
+      if (upstreamText) {
+        try {
+          upstreamBody = JSON.parse(upstreamText) as Record<string, unknown>;
+        } catch {
+          upstreamBody = null;
+        }
+      }
+    }
+
+    const upstreamStatus =
+      typeof upstreamBody?.status === "string"
+        ? upstreamBody.status.toLowerCase()
+        : null;
+    const upstreamResult =
+      typeof upstreamBody?.result === "string"
+        ? upstreamBody.result.toLowerCase()
+        : null;
+    const upstreamSuccess =
+      typeof upstreamBody?.success === "boolean" ? upstreamBody.success : null;
+
+    if (
+      !upstreamResponse.ok ||
+      upstreamStatus === "error" ||
+      upstreamResult === "error" ||
+      upstreamSuccess === false
+    ) {
+      console.error("Failed to append FIG enquiry to Google Apps Script", {
+        status: upstreamResponse.status,
+        upstreamBody,
+        upstreamText
+      });
 
       return NextResponse.json(
         {
           message:
-            "The enquiry form is temporarily unavailable. Please call or WhatsApp FIG directly."
+            "We could not submit the enquiry right now. Please call or WhatsApp FIG directly."
         },
-        { status: 503 }
+        { status: 502 }
       );
     }
 
-    console.error("Failed to append FIG enquiry to Google Sheets", error);
+    return NextResponse.json({
+      message:
+        typeof upstreamBody?.message === "string"
+          ? upstreamBody.message
+          : "Your enquiry has been received. FIG will review it and connect with you soon."
+    });
+  } catch (error) {
+    console.error("Failed to send FIG enquiry to Google Apps Script", error);
 
     return NextResponse.json(
       {
         message:
           "We could not submit the enquiry right now. Please call or WhatsApp FIG directly."
       },
-      { status: 500 }
+      { status: 502 }
     );
   }
 }

@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatCurrency(value: number) {
-  return `₹${new Intl.NumberFormat("en-IN").format(value)}`;
+  return `\u20B9${new Intl.NumberFormat("en-IN").format(value)}`;
 }
 
 export function getSiteUrl() {

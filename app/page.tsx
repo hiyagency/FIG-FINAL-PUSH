@@ -9,6 +9,7 @@ import {
   CheckCircle2,
   ExternalLink,
   FileBadge2,
+  Instagram,
   Landmark,
   Mail,
   MapPin,
@@ -26,6 +27,8 @@ import { SiteHeader } from "@/components/site-header";
 import { cn, formatCurrency, getSiteUrl } from "@/lib/fig-utils";
 import {
   businessInfo,
+  consultationSteps,
+  faqItems,
   galleryItems,
   leadershipTeam,
   planSchedule,
@@ -38,6 +41,13 @@ const featureIcons = [
   BriefcaseBusiness,
   CheckCircle2,
   Landmark
+] as const;
+
+const consultationIcons = [
+  MessageCircle,
+  PhoneCall,
+  BadgeCheck,
+  ShieldCheck
 ] as const;
 
 const galleryLayout = [
@@ -62,9 +72,10 @@ export default function HomePage() {
     foundingDate: "2024",
     founder: businessInfo.chairperson,
     identifier: businessInfo.registrationNumber,
+    sameAs: [businessInfo.instagramHref],
     address: {
       "@type": "PostalAddress",
-      streetAddress: "1st Floor, SR Complex, Saraikanpa Road, Burhar",
+      streetAddress: "1st Floor, SR Complex, Saraikampa Road, Burhar",
       addressLocality: "Burhar",
       addressRegion: "Madhya Pradesh",
       postalCode: "484110",
@@ -88,17 +99,24 @@ export default function HomePage() {
       `${siteUrl}/fig/gallery/reception-lounge.jpeg`
     ],
     url: siteUrl,
+    sameAs: [businessInfo.instagramHref],
     telephone: businessInfo.primaryPhone.raw,
     email: businessInfo.email,
     address: {
       "@type": "PostalAddress",
-      streetAddress: "1st Floor, SR Complex, Saraikanpa Road, Burhar",
+      streetAddress: "1st Floor, SR Complex, Saraikampa Road, Burhar",
       addressLocality: "Burhar",
       addressRegion: "Madhya Pradesh",
       postalCode: "484110",
       addressCountry: "IN"
     },
     areaServed: ["Burhar", "Shahdol", "Madhya Pradesh", "India"],
+    hasMap: businessInfo.mapHref,
+    serviceType: [
+      "Structured investment planning guidance",
+      "Savings planning consultation",
+      "Regular income plan discussions"
+    ],
     slogan: "Structured investment plans designed for regular income and long-term financial growth.",
     description:
       "Financial Investment Group (FIG) provides structured investment opportunities designed to support long-term financial growth and regular income-oriented planning.",
@@ -116,18 +134,49 @@ export default function HomePage() {
     }
   };
 
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: businessInfo.name,
+    alternateName: `${businessInfo.shortName} Burhar`,
+    url: siteUrl,
+    inLanguage: "en-IN",
+    publisher: {
+      "@type": "Organization",
+      name: businessInfo.name
+    }
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer
+      }
+    }))
+  };
+
   return (
     <>
       <SiteHeader />
-      <main id="top" className="relative overflow-hidden pb-24 md:pb-0">
+      <main id="main-content" className="relative overflow-hidden pb-24 md:pb-0">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify([organizationSchema, financialServiceSchema])
+            __html: JSON.stringify([
+              organizationSchema,
+              financialServiceSchema,
+              websiteSchema,
+              faqSchema
+            ])
           }}
         />
 
-        <section className="relative isolate overflow-hidden pt-6 sm:pt-10">
+        <section id="top" className="relative isolate overflow-hidden pt-6 sm:pt-10">
           <div className="pointer-events-none absolute inset-0">
             <div className="soft-grid absolute inset-x-0 top-0 h-[34rem] opacity-55" />
             <div className="absolute left-1/2 top-8 h-[24rem] w-[24rem] -translate-x-1/2 rounded-full bg-[#D4AF37]/12 blur-3xl" />
@@ -148,16 +197,16 @@ export default function HomePage() {
                       FIG
                     </div>
                     <h1 className="balance-text relative max-w-3xl text-4xl font-semibold leading-[1.02] text-[#08152f] sm:text-5xl lg:text-[4.2rem]">
-                      Structured investment plans designed for regular income and
-                      long-term financial growth.
+                      Financial Investment Group (FIG) offers structured
+                      investment planning guidance in Burhar, Shahdol.
                     </h1>
                   </div>
 
                   <p className="muted-copy mt-6 max-w-2xl text-base sm:text-lg">
-                    FIG serves clients from Burhar, Shahdol and nearby regions
-                    with a consultation-led approach, clear plan communication,
-                    and disciplined financial management built around long-term
-                    wealth participation.
+                    Consultation-led investment planning, savings conversations,
+                    and regular income-oriented plan discussions for individuals
+                    and families across Burhar, Shahdol, and nearby areas of
+                    Madhya Pradesh.
                   </p>
 
                   <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -184,6 +233,15 @@ export default function HomePage() {
                       <MessageCircle className="h-4 w-4" />
                       WhatsApp Us
                     </a>
+                    <a
+                      href={businessInfo.instagramHref}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="button-secondary"
+                    >
+                      <Instagram className="h-4 w-4" />
+                      Instagram
+                    </a>
                   </div>
 
                   <div className="mt-8 grid gap-4 rounded-[26px] border border-white/70 bg-white/75 p-5 shadow-[0_24px_80px_-40px_rgba(15,23,42,0.4)] backdrop-blur sm:grid-cols-3">
@@ -195,7 +253,7 @@ export default function HomePage() {
                       title="Udyam Registration"
                       value={businessInfo.registrationNumber}
                     />
-                    <TrustPill title="Operating Since" value="2024" />
+                    <TrustPill title="Local presence" value="Burhar, Shahdol" />
                   </div>
                 </div>
               </Reveal>
@@ -433,15 +491,15 @@ export default function HomePage() {
                 <div className="panel p-6 sm:p-8">
                   <SectionHeading
                     eyebrow="About FIG"
-                    title="A local financial group built around disciplined, transparent plan communication."
-                    description="FIG - Financial Investment Group is an investment group in which individuals invest funds and receive structured earning opportunities while their money works for them. The firm has been operating since 2024 and serves clients who value a direct, relationship-led approach."
+                    title="A local financial services brand built around disciplined, transparent plan communication."
+                    description="FIG - Financial Investment Group is an investment group in which individuals invest funds and receive structured earning opportunities while their money works for them. The firm has been operating since 2024 and serves Burhar and Shahdol clients who value a direct, relationship-led consultation experience."
                     centered={false}
                     className="max-w-none"
                   />
 
                   <div className="mt-8 grid gap-5 md:grid-cols-3">
-                    <InfoTile title="Burhar-based team" value="Serving Shahdol district with on-ground conversations and local accessibility." />
-                    <InfoTile title="Transparent plan tiers" value="Simple investment slabs with clear schedule illustrations and direct support." />
+                    <InfoTile title="Financial consultation in Burhar" value="Serving Shahdol district with on-ground conversations, local accessibility, and direct support." />
+                    <InfoTile title="Savings and plan guidance" value="Simple investment slabs with clear schedule illustrations for people comparing structured plans." />
                     <InfoTile title="NIC classification" value="Registered under NIC Code 66309 for management of other investment funds." />
                   </div>
                 </div>
@@ -487,6 +545,84 @@ export default function HomePage() {
                       </div>
                     ))}
                   </div>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </section>
+
+        <section id="guidance" className="section-shell pt-0">
+          <div className="container-shell">
+            <div className="grid gap-8 xl:grid-cols-[0.95fr_1.05fr]">
+              <Reveal>
+                <div className="panel p-6 sm:p-8">
+                  <SectionHeading
+                    eyebrow="Investment planning guidance"
+                    title="A clear consultation process for Burhar and Shahdol enquiries."
+                    description="Whether someone is exploring investment plans in Burhar, looking for savings planning in Shahdol, or wants local financial guidance with a premium experience, FIG keeps the process approachable and direct."
+                    centered={false}
+                    className="max-w-none"
+                  />
+
+                  <div className="mt-8 rounded-[24px] border border-[#D4AF37]/25 bg-[#fffaf0] p-5">
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8c6a10]">
+                      Local presence
+                    </p>
+                    <p className="mt-3 text-sm leading-7 text-slate-600">
+                      FIG operates from its Burhar office and supports
+                      conversations for local clients who want plan clarity,
+                      structured guidance, and easy contact access across Shahdol
+                      district.
+                    </p>
+
+                    <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                      <a
+                        href={businessInfo.mapHref}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="button-primary"
+                      >
+                        <MapPin className="h-4 w-4" />
+                        Open directions
+                      </a>
+                      <a
+                        href={businessInfo.instagramHref}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="button-secondary"
+                      >
+                        <Instagram className="h-4 w-4" />
+                        Follow on Instagram
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.08}>
+                <div className="grid gap-5 md:grid-cols-2">
+                  {consultationSteps.map((step, index) => {
+                    const Icon = consultationIcons[index];
+
+                    return (
+                      <div key={step.title} className="panel h-full p-6">
+                        <div className="flex items-center justify-between gap-4">
+                          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0B1F4B] text-white">
+                            <Icon className="h-5 w-5" />
+                          </span>
+                          <span className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                            Step 0{index + 1}
+                          </span>
+                        </div>
+                        <h3 className="mt-6 text-xl font-semibold text-[#08152f]">
+                          {step.title}
+                        </h3>
+                        <p className="mt-3 text-sm leading-7 text-slate-600">
+                          {step.description}
+                        </p>
+                      </div>
+                    );
+                  })}
                 </div>
               </Reveal>
             </div>
@@ -641,6 +777,36 @@ export default function HomePage() {
           </div>
         </section>
 
+        <section id="faq" className="section-shell pt-0">
+          <div className="container-shell">
+            <SectionHeading
+              eyebrow="FAQ"
+              title="Common questions from local investment and savings enquiries."
+              description="These answers are designed to support local search intent naturally while keeping the website responsible, clear, and trust-first."
+            />
+
+            <div className="mt-10 grid gap-5 lg:grid-cols-2">
+              {faqItems.map((item, index) => (
+                <Reveal key={item.question} delay={index * 0.04}>
+                  <details className="panel group p-6">
+                    <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-left">
+                      <span className="text-lg font-semibold text-[#08152f]">
+                        {item.question}
+                      </span>
+                      <span className="rounded-full border border-[#D4AF37]/25 bg-[#fffaf0] px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#8c6a10]">
+                        FIG
+                      </span>
+                    </summary>
+                    <p className="mt-4 text-sm leading-7 text-slate-600">
+                      {item.answer}
+                    </p>
+                  </details>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section className="section-shell pt-0">
           <div className="container-shell">
             <div className="panel-dark flex flex-col gap-6 overflow-hidden p-6 sm:p-8 lg:flex-row lg:items-center lg:justify-between">
@@ -649,16 +815,17 @@ export default function HomePage() {
                   Need a direct conversation?
                 </p>
                 <h2 className="mt-2 text-3xl font-semibold text-white">
-                  Speak to FIG for plan details, onboarding guidance, and office
-                  directions.
+                  Speak to FIG for plan details, local consultation guidance,
+                  and office directions.
                 </h2>
                 <p className="mt-3 text-sm leading-7 text-white/75">
-                  Call, WhatsApp, or send an enquiry and the FIG team can walk
-                  you through the current plan structure and next steps.
+                  Call, WhatsApp, connect on Instagram, or send an enquiry and
+                  the FIG team can walk you through the current plan structure
+                  and next steps.
                 </p>
               </div>
 
-              <div className="flex flex-col gap-3 sm:flex-row">
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <a href={businessInfo.primaryPhone.href} className="button-primary">
                   <PhoneCall className="h-4 w-4" />
                   Call FIG
@@ -671,6 +838,24 @@ export default function HomePage() {
                 >
                   <MessageCircle className="h-4 w-4" />
                   WhatsApp FIG
+                </a>
+                <a
+                  href={businessInfo.mapHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="button-secondary"
+                >
+                  <MapPin className="h-4 w-4" />
+                  Open directions
+                </a>
+                <a
+                  href={businessInfo.instagramHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="button-secondary"
+                >
+                  <Instagram className="h-4 w-4" />
+                  Instagram
                 </a>
               </div>
             </div>
@@ -685,7 +870,7 @@ export default function HomePage() {
                   <SectionHeading
                     eyebrow="Contact and enquiry"
                     title="Reach the FIG team through the channel that feels easiest."
-                    description="Use the enquiry form for a guided follow-up, or connect directly by phone, email, or WhatsApp."
+                    description="Use the enquiry form for a guided follow-up, or connect directly by phone, email, WhatsApp, Instagram, or office directions."
                     centered={false}
                     className="max-w-none"
                   />
@@ -712,6 +897,13 @@ export default function HomePage() {
                       actionLabel="Send email"
                       actionHref={`mailto:${businessInfo.email}`}
                     />
+                    <ContactCard
+                      icon={Instagram}
+                      title="Instagram"
+                      value={`@${businessInfo.instagramHandle}`}
+                      actionLabel="Open Instagram"
+                      actionHref={businessInfo.instagramHref}
+                    />
                   </div>
 
                   <div className="mt-6 flex flex-wrap gap-3">
@@ -735,6 +927,24 @@ export default function HomePage() {
                       <MessageCircle className="h-4 w-4" />
                       WhatsApp
                     </a>
+                    <a
+                      href={businessInfo.instagramHref}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="button-secondary"
+                    >
+                      <Instagram className="h-4 w-4" />
+                      Instagram
+                    </a>
+                    <a
+                      href={businessInfo.mapHref}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="button-secondary"
+                    >
+                      <MapPin className="h-4 w-4" />
+                      Directions
+                    </a>
                   </div>
                 </div>
               </Reveal>
@@ -749,8 +959,9 @@ export default function HomePage() {
                       Request a consultation
                     </h2>
                     <p className="mt-3 text-sm leading-7 text-slate-600">
-                      Leads from this form are validated before submission and
-                      can be appended directly to a Google Sheet for follow-up.
+                      The form validates key details before submission and sends
+                      your enquiry to FIG&apos;s Google Sheets follow-up workflow
+                      through a production-safe server route.
                     </p>
                   </div>
 

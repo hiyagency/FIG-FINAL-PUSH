@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Instagram, Mail, MapPin, MessageCircle, PhoneCall } from "lucide-react";
 
 import { businessInfo, navigationLinks } from "@/lib/site-data";
 
@@ -21,8 +22,9 @@ export function SiteFooter() {
 
           <p className="mt-5 text-sm leading-7 text-white/72">
             FIG provides structured investment opportunities designed for
-            regular income-oriented planning, transparent communication, and
-            long-term financial growth conversations.
+            regular income-oriented planning, transparent communication,
+            savings guidance, and long-term financial growth conversations for
+            Burhar, Shahdol, and nearby Madhya Pradesh clients.
           </p>
         </div>
 
@@ -47,7 +49,45 @@ export function SiteFooter() {
             <p>{businessInfo.address}</p>
             <p>{businessInfo.phones.map((phone) => phone.raw).join(" / ")}</p>
             <p>{businessInfo.email}</p>
+            <a
+              href={businessInfo.instagramHref}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 transition hover:text-white"
+            >
+              <Instagram className="h-4 w-4" />
+              @{businessInfo.instagramHandle}
+            </a>
             <p>Udyam Registration: {businessInfo.registrationNumber}</p>
+          </div>
+
+          <div className="mt-5 flex flex-wrap gap-3">
+            <a href={businessInfo.primaryPhone.href} className="button-secondary">
+              <PhoneCall className="h-4 w-4" />
+              Call
+            </a>
+            <a
+              href={businessInfo.whatsAppHref}
+              target="_blank"
+              rel="noreferrer"
+              className="button-secondary"
+            >
+              <MessageCircle className="h-4 w-4" />
+              WhatsApp
+            </a>
+            <a href={`mailto:${businessInfo.email}`} className="button-secondary">
+              <Mail className="h-4 w-4" />
+              Email
+            </a>
+            <a
+              href={businessInfo.mapHref}
+              target="_blank"
+              rel="noreferrer"
+              className="button-secondary"
+            >
+              <MapPin className="h-4 w-4" />
+              Directions
+            </a>
           </div>
         </div>
       </div>
@@ -57,7 +97,7 @@ export function SiteFooter() {
           <p>
             {new Date().getFullYear()} {businessInfo.name}. All rights reserved.
           </p>
-          <p>Burhar, Dist. Shahdol, Madhya Pradesh, India</p>
+          <p>Serving Burhar, Dist. Shahdol, Madhya Pradesh, India</p>
         </div>
       </div>
     </footer>

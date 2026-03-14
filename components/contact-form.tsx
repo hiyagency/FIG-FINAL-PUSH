@@ -1,14 +1,15 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoaderCircle, SendHorizonal } from "lucide-react";
-import { useState } from "react";
+import { CheckCircle2, LoaderCircle, SendHorizonal } from "lucide-react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import {
   type ContactFormInput,
   contactFormSchema
 } from "@/lib/contact-form-schema";
+import { type EnquiryPayload } from "@/lib/enquiry-payload";
 import { planSchedule } from "@/lib/site-data";
 
 type SubmissionState =
@@ -18,12 +19,12 @@ type SubmissionState =
 
 export function ContactForm() {
   const [submissionState, setSubmissionState] = useState<SubmissionState>(null);
+  const submitLockRef = useRef(false);
 
   const {
     register,
     handleSubmit,
     reset,
-    setError,
     formState: { errors, isSubmitting }
   } = useForm<ContactFormInput>({
     resolver: zodResolver(contactFormSchema),
@@ -33,65 +34,92 @@ export function ContactForm() {
       emailAddress: "",
       investmentAmount: "",
       message: "",
-      sourcePage: "",
       website: ""
     }
   });
 
   const onSubmit = handleSubmit(async (values) => {
-    setSubmissionState(null);
+    if (submitLockRef.current) {
+      return;
+    }
 
-    const response = await fetch("/api/enquiries", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        ...values,
-        sourcePage:
-          typeof window !== "undefined" ? window.location.href : values.sourcePage
-      })
-    });
-
-    const payload = (await response.json().catch(() => null)) as
-      | {
-          fieldErrors?: Partial<Record<keyof ContactFormInput, string[]>>;
-          message?: string;
-        }
-      | null;
-
-    if (!response.ok) {
-      if (payload?.fieldErrors) {
-        for (const [fieldName, fieldErrors] of Object.entries(payload.fieldErrors)) {
-          if (fieldErrors?.[0]) {
-            setError(fieldName as keyof ContactFormInput, {
-              type: "server",
-              message: fieldErrors[0]
-            });
-          }
-        }
-      }
-
+    if (values.website?.trim()) {
+      console.warn("Blocked probable spam submission through honeypot field.");
       setSubmissionState({
         tone: "error",
         message:
-          payload?.message ||
-          "We could not submit your enquiry right now. Please try again or contact FIG directly."
+          "We could not submit your enquiry right now. Please contact FIG directly by phone or WhatsApp."
       });
       return;
     }
 
-    reset();
-    setSubmissionState({
-      tone: "success",
-      message:
-        payload?.message ||
-        "Thanks for reaching out. FIG will review your enquiry and contact you soon."
-    });
+    setSubmissionState(null);
+    submitLockRef.current = true;
+
+    const payload: EnquiryPayload = {
+      full_name: values.fullName.trim(),
+      phone_number: values.phoneNumber.trim(),
+      email_address: values.emailAddress.trim(),
+      investment_amount: values.investmentAmount.trim(),
+      message: values.message.trim(),
+      page_url: window.location.href
+    };
+
+    try {
+      const response = await fetch("/api/enquiries", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const responseBody = (await response.json().catch(() => null)) as
+        | { message?: string }
+        | null;
+
+      if (!response.ok) {
+        console.error("FIG enquiry submission failed", {
+          status: response.status,
+          responseBody,
+          payload
+        });
+
+        setSubmissionState({
+          tone: "error",
+          message:
+            responseBody?.message ||
+            "We could not submit your enquiry right now. Please try again or contact FIG directly."
+        });
+        return;
+      }
+
+      reset();
+      setSubmissionState({
+        tone: "success",
+        message:
+          responseBody?.message ||
+          "Thanks for reaching out. FIG will review your enquiry and contact you soon."
+      });
+    } catch (error) {
+      console.error("Unable to send FIG enquiry request", error);
+      setSubmissionState({
+        tone: "error",
+        message:
+          "We could not submit your enquiry right now. Please try again or contact FIG directly."
+      });
+    } finally {
+      submitLockRef.current = false;
+    }
   });
 
   return (
     <form className="grid gap-5 pb-24 md:pb-0" onSubmit={onSubmit} noValidate>
+      <div className="rounded-[22px] border border-[#D4AF37]/20 bg-[#fffaf0] px-4 py-3 text-sm leading-6 text-slate-600">
+        Share the best way to reach you. FIG reviews enquiries and follows up
+        through the most suitable route, including call or WhatsApp where useful.
+      </div>
+
       <div className="grid gap-5 md:grid-cols-2">
         <div>
           <label
@@ -106,6 +134,8 @@ export function ContactForm() {
             placeholder="Your full name"
             className="field"
             autoComplete="name"
+            autoCapitalize="words"
+            aria-invalid={errors.fullName ? "true" : "false"}
             {...register("fullName")}
           />
           <FieldError message={errors.fullName?.message} />
@@ -124,6 +154,8 @@ export function ContactForm() {
             placeholder="+91 98XXXXXXXX"
             className="field"
             autoComplete="tel"
+            inputMode="tel"
+            aria-invalid={errors.phoneNumber ? "true" : "false"}
             {...register("phoneNumber")}
           />
           <p className="mt-2 text-xs text-slate-500">
@@ -140,6 +172,12 @@ export function ContactForm() {
             className="mb-2 block text-sm font-semibold text-[#08152f]"
           >
             Email Address
+            <span
+              aria-hidden="true"
+              className="ml-2 text-xs font-medium uppercase tracking-[0.2em] text-slate-400"
+            >
+              (Optional)
+            </span>
           </label>
           <input
             id="emailAddress"
@@ -147,6 +185,8 @@ export function ContactForm() {
             placeholder="you@example.com"
             className="field"
             autoComplete="email"
+            inputMode="email"
+            aria-invalid={errors.emailAddress ? "true" : "false"}
             {...register("emailAddress")}
           />
           <FieldError message={errors.emailAddress?.message} />
@@ -158,6 +198,12 @@ export function ContactForm() {
             className="mb-2 block text-sm font-semibold text-[#08152f]"
           >
             Investment Amount
+            <span
+              aria-hidden="true"
+              className="ml-2 text-xs font-medium uppercase tracking-[0.2em] text-slate-400"
+            >
+              (Optional)
+            </span>
           </label>
           <input
             id="investmentAmount"
@@ -165,6 +211,7 @@ export function ContactForm() {
             list="plan-suggestions"
             placeholder="Example: 2 Lakh"
             className="field"
+            aria-invalid={errors.investmentAmount ? "true" : "false"}
             {...register("investmentAmount")}
           />
           <datalist id="plan-suggestions">
@@ -183,12 +230,19 @@ export function ContactForm() {
           className="mb-2 block text-sm font-semibold text-[#08152f]"
         >
           Message
+          <span
+            aria-hidden="true"
+            className="ml-2 text-xs font-medium uppercase tracking-[0.2em] text-slate-400"
+          >
+            (Optional)
+          </span>
         </label>
         <textarea
           id="message"
           rows={5}
           placeholder="Tell FIG what you want to know, your preferred plan range, or the best time to contact you."
           className="field resize-y"
+          aria-invalid={errors.message ? "true" : "false"}
           {...register("message")}
         />
         <p className="mt-2 text-xs text-slate-500">
@@ -216,10 +270,15 @@ export function ContactForm() {
               ? "rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700"
               : "rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700"
           }
-          role="status"
-          aria-live="polite"
+          role={submissionState.tone === "success" ? "status" : "alert"}
+          aria-live={submissionState.tone === "success" ? "polite" : "assertive"}
         >
-          {submissionState.message}
+          <span className="inline-flex items-center gap-2">
+            {submissionState.tone === "success" ? (
+              <CheckCircle2 className="h-4 w-4" />
+            ) : null}
+            {submissionState.message}
+          </span>
         </div>
       ) : null}
 

@@ -18,18 +18,24 @@ const bodyFont = Inter({
 
 const siteUrl = getSiteUrl();
 const title =
-  "Financial Investment Group (FIG) | Structured Investment Plans in Burhar, Shahdol";
+  "Financial Investment Group (FIG) Burhar | Investment Planning Guidance in Shahdol";
 const description =
-  "Financial Investment Group (FIG) offers structured investment plans, regular income-oriented schedules, and personalised guidance from Burhar, Shahdol, Madhya Pradesh.";
+  "Financial Investment Group (FIG) in Burhar, Shahdol provides structured investment planning guidance, savings conversations, and local financial consultation across Madhya Pradesh.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title,
   description,
   applicationName: businessInfo.name,
+  category: "Financial Services",
   keywords: seoKeywords,
   alternates: {
     canonical: "/"
+  },
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg"
   },
   openGraph: {
     title,
@@ -78,7 +84,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${headingFont.variable} ${bodyFont.variable}`}>
-      <body className="font-[var(--font-body)] text-slate-950 antialiased">{children}</body>
+      <body className="font-[var(--font-body)] text-slate-950 antialiased">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-[#0B1F4B] focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
+        >
+          Skip to content
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

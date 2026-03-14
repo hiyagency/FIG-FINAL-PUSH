@@ -5,6 +5,7 @@ import {
 
 const primaryPhoneNumber = "+91 62612 06937";
 const secondaryPhoneNumber = "+91 92021 01863";
+const instagramHandle = "financial_investment_group";
 
 export const businessInfo = {
   name: "Financial Investment Group",
@@ -12,11 +13,15 @@ export const businessInfo = {
   chairperson: "Ashish Dwivedi",
   ceo: "Shivani Dwivedi",
   address:
-    "1st Floor, SR Complex, Saraikanpa Road, Burhar, Dist. Shahdol, Madhya Pradesh, PIN - 484110",
+    "1st Floor, SR Complex, Saraikampa Road, Burhar, Dist. Shahdol, Madhya Pradesh, PIN - 484110",
   email: "ashishtradinginfo1714@gmail.com",
   registrationNumber: "UDYAM-MP-43-0021871",
   nicCode: "66309",
   enterpriseName: "Financial Investment Group",
+  instagramHandle,
+  instagramHref: `https://www.instagram.com/${instagramHandle}/`,
+  enquiryEndpoint:
+    "https://script.google.com/macros/s/AKfycbzqBRwv1JYH0Ts_YRMPObUaDD4xYS2uj8-Tyo50KAJMqFO7k4pqzcQdc0LHxo9zwskA/exec",
   primaryPhone: {
     raw: primaryPhoneNumber,
     href: formatPhoneHref(primaryPhoneNumber)
@@ -40,7 +45,7 @@ export const businessInfo = {
     "Hello FIG, I would like to know more about your investment plans."
   ),
   mapHref:
-    "https://www.google.com/maps/search/?api=1&query=1st+Floor,+SR+Complex,+Saraikanpa+Road,+Burhar,+Shahdol,+Madhya+Pradesh+484110",
+    "https://www.google.com/maps/search/?api=1&query=1st+Floor,+SR+Complex,+Saraikampa+Road,+Burhar,+Shahdol,+Madhya+Pradesh+484110",
   certificateHref: "/fig/documents/udyam-registration.pdf"
 };
 
@@ -112,6 +117,57 @@ export const leadershipTeam = [
   }
 ];
 
+export const consultationSteps = [
+  {
+    title: "Start with a simple enquiry",
+    description:
+      "Reach FIG through the website form, phone call, WhatsApp, or Instagram to share your interest and preferred investment range."
+  },
+  {
+    title: "Discuss the right plan clearly",
+    description:
+      "The team explains available structured plan slabs, answers questions, and helps you understand the schedule illustrations before any next step."
+  },
+  {
+    title: "Review process and documentation",
+    description:
+      "FIG keeps the onboarding conversation direct and transparent so Burhar and Shahdol clients know what information and process details will be needed."
+  },
+  {
+    title: "Receive follow-up from the team",
+    description:
+      "Each enquiry is reviewed for a practical follow-up conversation by the most suitable contact route, including call or WhatsApp where appropriate."
+  }
+];
+
+export const faqItems = [
+  {
+    question: "What does Financial Investment Group (FIG) do?",
+    answer:
+      "FIG provides structured investment planning conversations, plan illustrations, and direct client guidance for people seeking regular income-oriented and long-term financial growth discussions."
+  },
+  {
+    question: "Does FIG guarantee returns or ranking-style promises?",
+    answer:
+      "No. The website is intentionally written without fake guarantees or unrealistic claims. Prospective clients should review suitability, documentation, and plan details directly with FIG before making a financial decision."
+  },
+  {
+    question: "Can I enquire if I am based in Burhar or Shahdol?",
+    answer:
+      "Yes. FIG is based in Burhar and serves enquiries from Burhar, Shahdol, and nearby areas of Madhya Pradesh through phone, WhatsApp, Instagram, email, and in-person office conversations."
+  },
+  {
+    question: "How can I contact FIG quickly?",
+    answer:
+      "You can submit the enquiry form, call the listed phone numbers, send a WhatsApp message, email the team, or connect on Instagram using the handle financial_investment_group."
+  },
+  {
+    question: "What should I include in my enquiry?",
+    answer:
+      "Your name, phone number, preferred investment amount, and any questions about the consultation process are enough to help FIG prepare an appropriate follow-up."
+  }
+];
+
 export const galleryItems = [
   {
     src: "/fig/gallery/reception-lounge.jpeg",
@@ -123,7 +179,7 @@ export const galleryItems = [
     src: "/fig/gallery/storefront-street.jpeg",
     alt: "Financial Investment Group storefront visible from the road in Burhar",
     kicker: "Street view",
-    caption: "Visible local presence on Saraikanpa Road in Burhar, Dist. Shahdol."
+    caption: "Visible local presence on Saraikampa Road in Burhar, Dist. Shahdol."
   },
   {
     src: "/fig/gallery/storefront-signage.jpeg",
@@ -154,11 +210,14 @@ export const galleryItems = [
 export const seoKeywords = [
   "Financial Investment Group",
   "FIG",
-  "investment plans in India",
+  "Financial Investment Group Burhar",
+  "FIG Burhar",
   "investment plans in Shahdol",
   "investment plans in Burhar",
-  "investment company in Shahdol",
-  "investment firm in Burhar",
+  "financial consultant Burhar",
+  "financial consultant Shahdol",
+  "savings plans Burhar",
+  "investment guidance Shahdol",
   "financial services in Shahdol",
   "local investment group in Madhya Pradesh",
   "regular income investment plans",

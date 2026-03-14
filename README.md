@@ -97,3 +97,31 @@ public/fig/
 - The project is ready for Vercel with the included `vercel.json`.
 - Set `NEXT_PUBLIC_SITE_URL` in the Vercel dashboard before deploying.
 - After deployment, update `NEXT_PUBLIC_SITE_URL` to the final production domain so canonical tags, sitemap, and schema use the correct URL.
+
+## GitHub-first workflow
+
+This repository is intended to be the source of truth for the FIG website.
+
+1. Make code changes in a branch or directly on the production branch.
+2. Push the changes to GitHub.
+3. Let Vercel build and deploy from the connected GitHub repository, or trigger a Vercel deployment from the dashboard if needed.
+4. Verify the production site on `https://figburhar.co.in`.
+
+The current production branch is `master`.
+
+## Cloud-only readiness notes
+
+- All production source files required by the live FIG website are tracked in Git and can be cloned from GitHub.
+- Local files such as `.env`, `.env.local`, `.next`, `node_modules`, local database files, and editor/tooling folders are intentionally excluded from Git.
+- The site has no runtime dependency on Supabase or Google Apps Script.
+- The live form submits directly to Formspree, so no custom backend form service is required for the current production site.
+
+## Fresh clone verification
+
+This repo was verified by cloning it into a fresh temporary directory, copying `.env.example` to `.env.local`, installing dependencies with `npm ci`, and running:
+
+```bash
+npm run build
+```
+
+The clean clone built successfully without relying on hidden local source files.

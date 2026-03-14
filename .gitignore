@@ -46,11 +46,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.vercel
-
 /uploads/*
 !/uploads/seed/
 !/uploads/seed/**
 /prisma/dev.db*
-
-.vercel

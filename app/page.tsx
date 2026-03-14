@@ -7,8 +7,10 @@ import {
   BriefcaseBusiness,
   Building2,
   CheckCircle2,
+  Download,
   ExternalLink,
   FileBadge2,
+  FileText,
   Instagram,
   Landmark,
   Mail,
@@ -31,6 +33,8 @@ import {
   faqItems,
   galleryItems,
   leadershipTeam,
+  mouDocumentPoints,
+  mouOverviewCards,
   planSchedule,
   whyChooseFig
 } from "@/lib/site-data";
@@ -49,6 +53,8 @@ const consultationIcons = [
   BadgeCheck,
   ShieldCheck
 ] as const;
+
+const mouIcons = [FileText, Building2, BadgeCheck, ShieldCheck] as const;
 
 const galleryLayout = [
   "md:col-span-4 md:row-span-2",
@@ -523,16 +529,22 @@ export default function HomePage() {
                     </p>
                   </div>
 
-                  <div id="leadership" className="grid gap-4 md:grid-cols-2">
-                    {leadershipTeam.map((leader) => (
-                      <div key={leader.name} className="panel p-6">
-                        <div className="flex items-start gap-4">
-                          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#fff8e5] text-lg font-semibold text-[#8c6a10]">
-                            {leader.initials}
-                          </div>
-                          <div>
-                            <p className="text-xl font-semibold text-[#08152f]">
-                              {leader.name}
+                    <div id="leadership" className="grid gap-4 md:grid-cols-2">
+                      {leadershipTeam.map((leader) => (
+                        <div key={leader.name} className="panel p-6">
+                          <div className="flex items-start gap-4">
+                            <div className="relative h-16 w-16 overflow-hidden rounded-2xl border border-[#D4AF37]/20 bg-[#fff8e5]">
+                              <Image
+                                src={leader.imageSrc}
+                                alt={leader.imageAlt}
+                                fill
+                                sizes="64px"
+                                className="object-cover"
+                              />
+                            </div>
+                            <div>
+                              <p className="text-xl font-semibold text-[#08152f]">
+                                {leader.name}
                             </p>
                             <p className="mt-1 text-sm font-medium text-[#8c6a10]">
                               {leader.role}
@@ -623,6 +635,116 @@ export default function HomePage() {
                       </div>
                     );
                   })}
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="mou"
+          className="section-shell bg-[linear-gradient(180deg,rgba(11,31,75,0.03),transparent)] pt-0"
+        >
+          <div className="container-shell">
+            <div className="grid gap-8 xl:grid-cols-[1fr_0.96fr]">
+              <Reveal>
+                <div className="panel p-6 sm:p-8">
+                  <SectionHeading
+                    eyebrow="Client MOU"
+                    title="A clean view of how the client agreement works before signing."
+                    description="FIG has provided a Memorandum of Understanding (MOU) template that records investor information, investment details, nominee details, and the written terms clients are expected to review before joining."
+                    centered={false}
+                    className="max-w-none"
+                  />
+
+                  <div className="mt-8 grid gap-5 md:grid-cols-2">
+                    {mouOverviewCards.map((item, index) => {
+                      const Icon = mouIcons[index];
+
+                      return (
+                        <div key={item.title} className="rounded-[24px] border border-slate-200 bg-[#fcfaf4] p-5">
+                          <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#0B1F4B] text-white">
+                            <Icon className="h-5 w-5" />
+                          </span>
+                          <h3 className="mt-5 text-xl font-semibold text-[#08152f]">
+                            {item.title}
+                          </h3>
+                          <p className="mt-3 text-sm leading-7 text-slate-600">
+                            {item.description}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div className="mt-8 rounded-[24px] border border-[#D4AF37]/25 bg-[#fffaf0] p-5 text-sm leading-7 text-slate-600">
+                    This section is a plain-language guide to the client-provided
+                    MOU document. Clients should read the full MOU and clarify any
+                    clause, especially dividend, withdrawal, and responsibility
+                    wording, directly with FIG before signing.
+                  </div>
+                </div>
+              </Reveal>
+
+              <Reveal delay={0.08}>
+                <div className="panel-dark overflow-hidden">
+                  <div className="border-b border-white/10 px-6 py-5 sm:px-8">
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#f8dd89]">
+                      Document preview
+                    </p>
+                    <h2 className="mt-2 text-2xl font-semibold text-white">
+                      What clients see in the MOU
+                    </h2>
+                    <p className="mt-3 text-sm leading-7 text-white/72">
+                      The full document is available below, and this preview helps
+                      visitors understand the structure before they open it.
+                    </p>
+                  </div>
+
+                  <div className="grid gap-6 p-6 sm:p-8">
+                    <div className="rounded-[24px] border border-white/10 bg-white/10 p-5 backdrop-blur">
+                      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#f8dd89]">
+                        Included sections
+                      </p>
+                      <div className="mt-4 grid gap-3">
+                        {mouDocumentPoints.map((point) => (
+                          <div
+                            key={point}
+                            className="flex items-start gap-3 rounded-2xl border border-white/10 bg-[#09152d]/70 px-4 py-3"
+                          >
+                            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#f8dd89]" />
+                            <p className="text-sm leading-6 text-white/80">{point}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="rounded-[24px] border border-white/10 bg-[#09152d]/70 p-5">
+                      <p className="text-sm font-semibold text-white">
+                        Client-friendly summary
+                      </p>
+                      <p className="mt-3 text-sm leading-7 text-white/75">
+                        The MOU first records the client identity and investment
+                        details, then lists the written clauses the client is
+                        expected to review. It ends with a declaration that the
+                        client has read the terms and agreed to proceed.
+                      </p>
+
+                      <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                        <a
+                          href={businessInfo.mouHref}
+                          download
+                          className="button-primary"
+                        >
+                          <Download className="h-4 w-4" />
+                          Download MOU
+                        </a>
+                        <Link href="#contact" className="button-secondary">
+                          Ask About the MOU
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </Reveal>
             </div>
@@ -960,8 +1082,8 @@ export default function HomePage() {
                     </h2>
                     <p className="mt-3 text-sm leading-7 text-slate-600">
                       The form validates key details before submission and sends
-                      your enquiry to FIG&apos;s Google Sheets follow-up workflow
-                      through a production-safe server route.
+                      your enquiry directly into FIG&apos;s Google Sheets follow-up
+                      workflow.
                     </p>
                   </div>
 

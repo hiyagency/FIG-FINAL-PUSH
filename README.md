@@ -1,6 +1,6 @@
 # Financial Investment Group Website
 
-Premium, mobile-first marketing website for Financial Investment Group (FIG), built with Next.js App Router, TypeScript, Tailwind CSS, Framer Motion, React Hook Form, Zod, and Google Sheets lead capture through a Google Apps Script endpoint.
+Premium, mobile-first marketing website for Financial Investment Group (FIG), built with Next.js App Router, TypeScript, Tailwind CSS, Framer Motion, React Hook Form, Zod, and Formspree lead capture.
 
 ## Stack
 
@@ -9,7 +9,7 @@ Premium, mobile-first marketing website for Financial Investment Group (FIG), bu
 - Tailwind CSS
 - Framer Motion for subtle section reveals
 - React Hook Form + Zod validation
-- Google Apps Script lead capture proxy
+- Formspree direct lead capture
 - Vercel-ready deployment
 
 ## Local development
@@ -45,32 +45,31 @@ Premium, mobile-first marketing website for Financial Investment Group (FIG), bu
    npm run start
    ```
 
-## Google Sheets lead capture setup
+## Enquiry delivery setup
 
-The contact form posts to the local Next.js API route at `/api/enquiries`, and that route forwards the exact required JSON payload to the client-provided Google Apps Script endpoint.
+The contact form submits directly to Formspree using the configured endpoint:
 
-This proxy is intentional: the live Apps Script endpoint currently responds to browser-style preflight `OPTIONS` requests with `405 Method Not Allowed`, so sending `application/json` to it directly from the browser would be unreliable. Routing the request through Next.js keeps the production form stable while preserving the exact payload keys required by the sheet workflow.
+`https://formspree.io/f/mdawloak`
 
-Required payload sent upstream:
+Submitted payload shape:
 
 ```json
 {
-  "full_name": "string",
-  "phone_number": "string",
-  "email_address": "string",
-  "investment_amount": "string",
+  "name": "string",
+  "phone": "string",
+  "email": "string",
+  "investmentAmount": "string",
   "message": "string",
-  "page_url": "https://example.com/current-page"
+  "pageUrl": "https://example.com/contact"
 }
 ```
 
-The live Google Apps Script endpoint is configured in code from the business data layer and does not require secret credentials in this project.
+The live form keeps the same UI and client-side validation while posting directly to Formspree with JSON.
 
 ## Project structure
 
 ```text
 app/
-  api/enquiries/route.ts     # Proxy to the Google Apps Script lead endpoint
   layout.tsx                 # Global metadata and fonts
   page.tsx                   # Single-page FIG experience
   opengraph-image.tsx        # Social preview image
@@ -85,7 +84,6 @@ components/
   site-header.tsx
 lib/
   contact-form-schema.ts
-  enquiry-payload.ts
   fig-utils.ts
   site-data.ts
 public/fig/

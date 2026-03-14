@@ -10,10 +10,17 @@ export function formatCurrency(value: number) {
 }
 
 export function getSiteUrl() {
-  return (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(
-    /\/$/,
-    ""
-  );
+  const rawSiteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined) ||
+    "http://localhost:3000";
+
+  const normalizedSiteUrl = /^https?:\/\//i.test(rawSiteUrl)
+    ? rawSiteUrl
+    : `https://${rawSiteUrl}`;
+
+  return normalizedSiteUrl.replace(/\/$/, "");
 }
 
 export function formatPhoneHref(phoneNumber: string) {

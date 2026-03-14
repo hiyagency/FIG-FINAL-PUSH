@@ -9,13 +9,14 @@ import {
   type ContactFormInput,
   contactFormSchema
 } from "@/lib/contact-form-schema";
-import { type EnquiryPayload } from "@/lib/enquiry-payload";
 import { planSchedule } from "@/lib/site-data";
 
 type SubmissionState =
   | { tone: "success"; message: string }
   | { tone: "error"; message: string }
   | null;
+
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mdawloak";
 
 export function ContactForm() {
   const [submissionState, setSubmissionState] = useState<SubmissionState>(null);
@@ -47,8 +48,7 @@ export function ContactForm() {
       console.warn("Blocked probable spam submission through honeypot field.");
       setSubmissionState({
         tone: "error",
-        message:
-          "We could not submit your enquiry right now. Please contact FIG directly by phone or WhatsApp."
+        message: "Submission failed. Please try again."
       });
       return;
     }
@@ -56,40 +56,40 @@ export function ContactForm() {
     setSubmissionState(null);
     submitLockRef.current = true;
 
-    const payload: EnquiryPayload = {
-      full_name: values.fullName.trim(),
-      phone_number: values.phoneNumber.trim(),
-      email_address: values.emailAddress.trim(),
-      investment_amount: values.investmentAmount.trim(),
+    const payload = {
+      name: values.fullName.trim(),
+      phone: values.phoneNumber.trim(),
+      email: values.emailAddress.trim(),
+      investmentAmount: values.investmentAmount.trim(),
       message: values.message.trim(),
-      page_url: window.location.href
+      pageUrl: window.location.href
     };
 
     try {
-      const response = await fetch("/api/enquiries", {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          Accept: "application/json"
         },
         body: JSON.stringify(payload)
       });
 
       const responseBody = (await response.json().catch(() => null)) as
-        | { message?: string }
+        | { message?: string; errors?: unknown }
         | null;
 
       if (!response.ok) {
         console.error("FIG enquiry submission failed", {
           status: response.status,
           responseBody,
+          fieldErrors: responseBody?.errors,
           payload
         });
 
         setSubmissionState({
           tone: "error",
-          message:
-            responseBody?.message ||
-            "We could not submit your enquiry right now. Please try again or contact FIG directly."
+          message: responseBody?.message || "Submission failed. Please try again."
         });
         return;
       }
@@ -98,15 +98,13 @@ export function ContactForm() {
       setSubmissionState({
         tone: "success",
         message:
-          responseBody?.message ||
-          "Thanks for reaching out. FIG will review your enquiry and contact you soon."
+          responseBody?.message || "Thank you. Our team will contact you shortly."
       });
     } catch (error) {
       console.error("Unable to send FIG enquiry request", error);
       setSubmissionState({
         tone: "error",
-        message:
-          "We could not submit your enquiry right now. Please try again or contact FIG directly."
+        message: "Submission failed. Please try again."
       });
     } finally {
       submitLockRef.current = false;

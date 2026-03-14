@@ -11,7 +11,7 @@ export const businessInfo = {
   name: "Financial Investment Group",
   shortName: "FIG",
   chairperson: "Ashish Dwivedi",
-  ceo: "Shivani Dwivedi",
+  ceo: "Hivani Dubey",
   address:
     "1st Floor, SR Complex, Saraikampa Road, Burhar, Dist. Shahdol, Madhya Pradesh, PIN - 484110",
   email: "ashishtradinginfo1714@gmail.com",
@@ -20,8 +20,7 @@ export const businessInfo = {
   enterpriseName: "Financial Investment Group",
   instagramHandle,
   instagramHref: `https://www.instagram.com/${instagramHandle}/`,
-  enquiryEndpoint:
-    "https://script.google.com/macros/s/AKfycbzqBRwv1JYH0Ts_YRMPObUaDD4xYS2uj8-Tyo50KAJMqFO7k4pqzcQdc0LHxo9zwskA/exec",
+  mouHref: "/fig/documents/financial-investment-group-mou.docx",
   primaryPhone: {
     raw: primaryPhoneNumber,
     href: formatPhoneHref(primaryPhoneNumber)
@@ -54,6 +53,7 @@ export const navigationLinks = [
   { label: "Why FIG", href: "#why-choose" },
   { label: "Plans", href: "#plans" },
   { label: "About", href: "#about" },
+  { label: "MOU", href: "#mou" },
   { label: "Trust", href: "#trust" },
   { label: "Gallery", href: "#gallery" },
   { label: "Contact", href: "#contact" }
@@ -103,17 +103,19 @@ export const planSchedule = [
 export const leadershipTeam = [
   {
     name: "Ashish Dwivedi",
-    role: "Chairperson & Managing Director",
-    initials: "AD",
+    role: "Chairman & Managing Director",
+    imageSrc: "/fig/leadership/ashish-dwivedi.jpeg",
+    imageAlt: "Ashish Dwivedi, Chairman and Managing Director of Financial Investment Group",
     description:
       "Ashish Dwivedi leads FIG with a direct, relationship-led approach that reinforces trust, disciplined communication, and local accessibility for clients."
   },
   {
-    name: "Shivani Dwivedi",
+    name: "Hivani Dubey",
     role: "CEO",
-    initials: "SD",
+    imageSrc: "/fig/leadership/hivani-dubey.jpeg",
+    imageAlt: "Hivani Dubey, CEO of Financial Investment Group",
     description:
-      "Shivani Dwivedi supports FIG's service quality, client engagement, and operational consistency across the investment enquiry experience."
+      "Hivani Dubey supports FIG's service quality, client engagement, and operational consistency across the investment enquiry experience."
   }
 ];
 
@@ -138,6 +140,40 @@ export const consultationSteps = [
     description:
       "Each enquiry is reviewed for a practical follow-up conversation by the most suitable contact route, including call or WhatsApp where appropriate."
   }
+];
+
+export const mouOverviewCards = [
+  {
+    title: "Agreement details",
+    description:
+      "The MOU captures the agreement date, the business party, and the investor details before any onboarding is finalized."
+  },
+  {
+    title: "Investor information",
+    description:
+      "Clients fill in name, address, city, district, state, Aadhaar number, and PAN number so the document records who is participating."
+  },
+  {
+    title: "Investment and nominee",
+    description:
+      "The document includes the invested amount, dividend wording, start date references, and nominee details with relationship information."
+  },
+  {
+    title: "Terms review",
+    description:
+      "Withdrawal, holding-period, and acknowledgement clauses are written into the MOU and should be read carefully with FIG before signing."
+  }
+];
+
+export const mouDocumentPoints = [
+  "Agreement date and parties involved",
+  "Investor identity and address details",
+  "Aadhaar and PAN information fields",
+  "Investment amount and written amount fields",
+  "Dividend and start-date wording as written in the document",
+  "Nominee name and relationship details",
+  "Withdrawal and holding-period clauses",
+  "Client acknowledgement before joining FIG"
 ];
 
 export const faqItems = [

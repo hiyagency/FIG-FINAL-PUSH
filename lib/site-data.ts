@@ -11,7 +11,7 @@ export const businessInfo = {
   name: "Financial Investment Group",
   shortName: "FIG",
   chairperson: "Ashish Dwivedi",
-  ceo: "Hivani Dubey",
+  ceo: "Shivani Dubey",
   address:
     "1st Floor, SR Complex, Saraikampa Road, Burhar, Dist. Shahdol, Madhya Pradesh, PIN - 484110",
   email: "ashishtradinginfo1714@gmail.com",
@@ -110,12 +110,12 @@ export const leadershipTeam = [
       "Ashish Dwivedi leads FIG with a direct, relationship-led approach that reinforces trust, disciplined communication, and local accessibility for clients."
   },
   {
-    name: "Hivani Dubey",
+    name: "Shivani Dubey",
     role: "CEO",
     imageSrc: "/fig/leadership/hivani-dubey.jpeg",
-    imageAlt: "Hivani Dubey, CEO of Financial Investment Group",
+    imageAlt: "Shivani Dubey, CEO of Financial Investment Group",
     description:
-      "Hivani Dubey supports FIG's service quality, client engagement, and operational consistency across the investment enquiry experience."
+      "Shivani Dubey supports FIG's service quality, client engagement, and operational consistency across the investment enquiry experience."
   }
 ];
 

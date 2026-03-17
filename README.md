@@ -1,127 +1,216 @@
-# Financial Investment Group Website
+# Lead.ai
 
-Premium, mobile-first marketing website for Financial Investment Group (FIG), built with Next.js App Router, TypeScript, Tailwind CSS, Framer Motion, React Hook Form, Zod, and Formspree lead capture.
+Lead.ai is a production-oriented MVP for AI-assisted B2B lead discovery and prospecting. Users describe their ideal customer profile in natural language, review the parsed intent, and launch a compliant discovery pipeline that searches lawful public business sources, audits company websites, scores lead quality, and exports ranked results.
+
+## Product scope
+
+- Public-business-source lead discovery only
+- AI prompt parsing with strict JSON output and deterministic fallback
+- Modular connector layer for approved APIs and public websites
+- Website audit heuristics for SEO, mobile UX, CTA, schema, and funnel signals
+- Public business contact extraction only
+- Dedupe, scoring, ranking, campaign/list saving, and CSV/XLSX export
+- Authenticated dashboard, search workbench, results, lead detail, campaigns, and settings
 
 ## Stack
 
 - Next.js 16 App Router
-- TypeScript
-- Tailwind CSS
-- Framer Motion for subtle section reveals
-- React Hook Form + Zod validation
-- Formspree direct lead capture
-- Vercel-ready deployment
+- TypeScript, Tailwind CSS, React Query, Zustand, Framer Motion-ready UI layer
+- Prisma + PostgreSQL
+- BullMQ + Redis for async search/export jobs
+- NextAuth database sessions + credentials + custom email OTP auth
+- OpenAI SDK for optional prompt parsing and outreach enrichment
 
-## Local development
+## Main routes
 
-1. Install dependencies:
+- `/` landing page
+- `/auth/login`
+- `/auth/register`
+- `/app` dashboard
+- `/app/search` new search workbench
+- `/app/searches/[searchId]` results and progress
+- `/app/leads/[leadId]` lead detail
+- `/app/campaigns`
+- `/app/settings`
+
+## Folder structure
+
+```text
+app/
+  (auth)/
+  (protected)/app/
+  api/
+components/
+  lead-ai/
+  ui/
+lib/
+  connectors/
+  auth.ts
+  db.ts
+  env.ts
+  queues.ts
+modules/
+  ai/
+  lead-ai/
+prisma/
+  schema.prisma
+  seed.ts
+worker/
+  index.ts
+  processors/
+```
+
+## Core data model
+
+The Prisma schema includes:
+
+- `User`, `Account`, `Session`, `VerificationToken`, `PasswordCredential`
+- `Search`, `ParsedQuery`, `SearchJob`
+- `Lead`, `LeadSource`, `LeadScore`, `SearchLead`
+- `Campaign`, `CampaignLead`
+- `LeadList`, `LeadListLead`
+- `Export`
+- `LeadSettings`
+- `AuditLog` (reused for compliance and traceability)
+
+## Environment
+
+Copy the template and fill in the values you need:
+
+```powershell
+Copy-Item .env.example .env.local
+```
+
+Important variables:
+
+- `DATABASE_URL`
+- `REDIS_URL`
+- `NEXTAUTH_SECRET`
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_SECURE`
+- `SMTP_USER`
+- `SMTP_PASS`
+- `SMTP_FROM`
+- `OPENAI_API_KEY`
+- `OPENAI_MODEL`
+- `GOOGLE_MAPS_API_KEY`
+- `SEARCH_API_PROVIDER`
+- `SEARCH_API_KEY`
+- `LEAD_AI_ENABLE_MOCK_DATA`
+- `LEAD_AI_DISABLE_QUEUE`
+
+## Local setup
+
+1. Install dependencies.
 
    ```bash
    npm install
    ```
 
-2. Create a local environment file:
+2. Generate Prisma client.
 
    ```bash
-   cp .env.example .env.local
+   npm run prisma:generate
    ```
 
-   On Windows PowerShell:
+3. Push schema to the database.
 
-   ```powershell
-   Copy-Item .env.example .env.local
+   ```bash
+   npm run db:push
    ```
 
-3. Start the development server:
+4. Seed the demo user and optional mock dataset.
+
+   ```bash
+   npm run prisma:seed
+   ```
+
+5. Start the app.
 
    ```bash
    npm run dev
    ```
 
-4. Build for production:
+6. Optional: run the worker in a second terminal if Redis-backed queues are enabled.
 
    ```bash
-   npm run build
-   npm run start
+   npm run worker:dev
    ```
 
-## Enquiry delivery setup
+7. Configure email OTP delivery.
 
-The contact form submits directly to Formspree using the configured endpoint:
+   - Local dev: point SMTP to Mailpit or another local SMTP inbox.
+   - Low-volume production: Brevo SMTP works well on the free tier.
+   - The app uses the standard Nodemailer SMTP variables from `.env.example`, so you can swap providers without changing code.
 
-`https://formspree.io/f/mdawloak`
+   Example Brevo configuration:
 
-Submitted payload shape:
+   ```env
+   SMTP_HOST=smtp-relay.brevo.com
+   SMTP_PORT=587
+   SMTP_SECURE=false
+   SMTP_USER=YOUR_BREVO_LOGIN
+   SMTP_PASS=YOUR_BREVO_SMTP_KEY
+   SMTP_FROM=Lead.ai <no-reply@yourdomain.com>
+   ```
 
-```json
-{
-  "name": "string",
-  "phone": "string",
-  "email": "string",
-  "investmentAmount": "string",
-  "message": "string",
-  "pageUrl": "https://example.com/contact"
-}
-```
+## Demo login
 
-The live form keeps the same UI and client-side validation while posting directly to Formspree with JSON.
+- Email: `founder@lead.ai`
+- Password: `LeadAiDemoPassword123!`
 
-## Project structure
+These are controlled by `LEAD_AI_DEFAULT_USER_EMAIL` and `LEAD_AI_DEFAULT_USER_PASSWORD`.
 
-```text
-app/
-  layout.tsx                 # Global metadata and fonts
-  page.tsx                   # Single-page FIG experience
-  opengraph-image.tsx        # Social preview image
-  sitemap.ts                 # Sitemap route
-  robots.ts                  # Robots route
-components/
-  contact-form.tsx
-  mobile-action-bar.tsx
-  reveal.tsx
-  section-heading.tsx
-  site-footer.tsx
-  site-header.tsx
-lib/
-  contact-form-schema.ts
-  fig-utils.ts
-  site-data.ts
-public/fig/
-  brand/
-  gallery/
-  documents/
-```
+## Search pipeline
 
-## Deployment notes
+1. Prompt parsing
+2. Connector fan-out
+3. Public website enrichment
+4. Contact extraction
+5. Dedupe and normalization
+6. Scoring and ranking
+7. AI outreach insight generation
+8. Export and campaign/list actions
 
-- The project is ready for Vercel with the included `vercel.json`.
-- Set `NEXT_PUBLIC_SITE_URL` in the Vercel dashboard before deploying.
-- After deployment, update `NEXT_PUBLIC_SITE_URL` to the final production domain so canonical tags, sitemap, and schema use the correct URL.
+## Connector architecture
 
-## GitHub-first workflow
+Lead.ai ships with a typed connector abstraction:
 
-This repository is intended to be the source of truth for the FIG website.
+- `lib/connectors/base.ts`
+- `lib/connectors/searchApi.ts`
+- `lib/connectors/directoryA.ts`
+- `lib/connectors/publicWeb.ts`
+- `lib/connectors/companyWebsite.ts`
 
-1. Make code changes in a branch or directly on the production branch.
-2. Push the changes to GitHub.
-3. Let Vercel build and deploy from the connected GitHub repository, or trigger a Vercel deployment from the dashboard if needed.
-4. Verify the production site on `https://figburhar.co.in`.
+The production path uses approved APIs and public websites only. If connector credentials are not configured, the app can fall back to explicit mock mode for development.
 
-The current production branch is `master`.
-
-## Cloud-only readiness notes
-
-- All production source files required by the live FIG website are tracked in Git and can be cloned from GitHub.
-- Local files such as `.env`, `.env.local`, `.next`, `node_modules`, local database files, and editor/tooling folders are intentionally excluded from Git.
-- The site has no runtime dependency on Supabase or Google Apps Script.
-- The live form submits directly to Formspree, so no custom backend form service is required for the current production site.
-
-## Fresh clone verification
-
-This repo was verified by cloning it into a fresh temporary directory, copying `.env.example` to `.env.local`, installing dependencies with `npm ci`, and running:
+## Commands
 
 ```bash
+npm run dev
+npm run worker:dev
+npm run prisma:generate
+npm run db:push
+npm run prisma:seed
+npm run lint
+npm run typecheck
+npm run test
 npm run build
 ```
 
-The clean clone built successfully without relying on hidden local source files.
+## Verification
+
+The current repo passes:
+
+- `npm run lint`
+- `npm run typecheck`
+- `npm run test`
+- `npm run build`
+
+## Compliance notes
+
+- Only public business information or user-imported data should be collected
+- No scraping behind logins, CAPTCHAs, or restricted flows
+- No personal phone numbers or personal emails
+- Every exported lead should remain source-backed and confidence-scored

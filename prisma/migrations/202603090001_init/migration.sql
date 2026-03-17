@@ -1,0 +1,1 @@
+-- No-op placeholder migration retained to preserve migration history.

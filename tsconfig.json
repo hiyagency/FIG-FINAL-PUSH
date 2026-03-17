@@ -17,6 +17,10 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
+    "types": [
+      "node",
+      "vitest/globals"
+    ],
     "baseUrl": ".",
     "paths": {
       "@/*": [
@@ -37,6 +41,13 @@
     "components/**/*.tsx",
     "lib/**/*.ts",
     "lib/**/*.tsx",
+    "modules/**/*.ts",
+    "modules/**/*.tsx",
+    "types/**/*.d.ts",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "worker/**/*.ts",
+    "worker/**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],

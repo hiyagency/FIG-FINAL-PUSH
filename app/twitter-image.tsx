@@ -1,1 +1,1 @@
-export { contentType, default, size } from "@/app/opengraph-image";
+export { default, contentType, size } from "@/app/opengraph-image";

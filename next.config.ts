@@ -1,11 +1,23 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "standalone",
+  allowedDevOrigins: ["127.0.0.1", "localhost"],
   images: {
-    remotePatterns: []
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**"
+      }
+    ]
   },
   turbopack: {
     root: process.cwd()
+  },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "10mb"
+    }
   }
 };
 

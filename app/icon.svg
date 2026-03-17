@@ -1,6 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Financial Investment Group icon">
-  <rect width="128" height="128" rx="28" fill="#0B1F4B" />
-  <path d="M18 92h92" stroke="#D4AF37" stroke-width="4" stroke-linecap="round" />
-  <path d="M28 88V48m18 40V38m18 50V56m18 32V28" stroke="#D4AF37" stroke-width="8" stroke-linecap="round" />
-  <text x="64" y="114" text-anchor="middle" font-size="18" font-family="Arial, sans-serif" font-weight="700" fill="#F8F6F1">FIG</text>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="64" height="64" rx="18" fill="url(#paint0_linear_103_11)"/>
+  <rect x="5.5" y="5.5" width="53" height="53" rx="14.5" stroke="rgba(255,255,255,0.38)"/>
+  <path d="M22 18.5H27.5V31.2L40.2 18.5H47L33.1 32.4L47.7 46H40.5L27.5 33.9V46H22V18.5Z" fill="#FFF8F5"/>
+  <defs>
+    <linearGradient id="paint0_linear_103_11" x1="10" y1="8" x2="58" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7A4B5A"/>
+      <stop offset="0.55" stop-color="#A76E7F"/>
+      <stop offset="1" stop-color="#E7C7BD"/>
+    </linearGradient>
+  </defs>
 </svg>

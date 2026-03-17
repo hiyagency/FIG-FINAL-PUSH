@@ -5,7 +5,8 @@ const config: Config = {
   content: [
     "./app/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
-    "./lib/**/*.{ts,tsx}"
+    "./lib/**/*.{ts,tsx}",
+    "./modules/**/*.{ts,tsx}"
   ],
   theme: {
     extend: {
@@ -38,7 +39,24 @@ const config: Config = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))"
+        },
+        brand: {
+          50: "#f5f7ff",
+          100: "#e8eeff",
+          200: "#c8d7ff",
+          300: "#9ab7ff",
+          400: "#678cff",
+          500: "#4464ff",
+          600: "#3147f0",
+          700: "#2735d1",
+          800: "#2230a7",
+          900: "#1f2d84",
+          950: "#171f52"
         }
+      },
+      fontFamily: {
+        sans: ["var(--font-sans)", "sans-serif"],
+        display: ["var(--font-display)", "serif"]
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -46,15 +64,18 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)"
       },
       boxShadow: {
-        soft: "0 24px 60px -28px rgba(15, 23, 42, 0.28)"
+        soft: "0 24px 60px -28px rgba(15, 23, 42, 0.28)",
+        panel: "0 24px 80px -40px rgba(8, 15, 34, 0.6)"
       },
       backgroundImage: {
         "grain-gradient":
-          "radial-gradient(circle at top left, rgba(18, 112, 255, 0.12), transparent 40%), radial-gradient(circle at top right, rgba(10, 120, 106, 0.12), transparent 36%), linear-gradient(180deg, #f8fbff 0%, #f5f4ef 100%)"
+          "radial-gradient(circle at top left, rgba(18, 112, 255, 0.12), transparent 40%), radial-gradient(circle at top right, rgba(10, 120, 106, 0.12), transparent 36%), linear-gradient(180deg, #f8fbff 0%, #f5f4ef 100%)",
+        "aurora-shell":
+          "radial-gradient(circle at 20% 0%, rgba(68, 100, 255, 0.18), transparent 30%), radial-gradient(circle at 80% 0%, rgba(21, 199, 172, 0.18), transparent 28%), linear-gradient(180deg, #081121 0%, #0d1830 42%, #f3f6fb 100%)"
       }
     }
   },
-  plugins: []
+  plugins: [require("@tailwindcss/typography")]
 };
 
 export default config;

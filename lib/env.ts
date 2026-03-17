@@ -72,6 +72,7 @@ const envSchema = z.object({
   SEARCH_API_KEY: z.string().optional().default(""),
   SEARCH_API_BASE_URL: z.string().optional().default(""),
   LEAD_AI_ENABLE_MOCK_DATA: booleanFromEnv(true),
+  LEAD_AI_DISABLE_AUTH: booleanFromEnv(true),
   LEAD_AI_DISABLE_QUEUE: booleanFromEnv(false),
   LEAD_AI_EXPORT_DIR: z.string().default("uploads/exports"),
   LEAD_AI_DEFAULT_USER_EMAIL: z.string().default("founder@lead.ai"),

@@ -2,7 +2,9 @@ import { promises as fs } from "node:fs";
 
 import { NextResponse } from "next/server";
 
+import { env } from "@/lib/env";
 import { getServerAuthSession } from "@/lib/auth";
+import { buildDemoExportDownload } from "@/modules/lead-ai/demo-mode";
 import { getExportRecord } from "@/modules/lead-ai/service";
 
 export async function GET(
@@ -16,6 +18,22 @@ export async function GET(
   }
 
   const { exportId } = await params;
+
+  if (env.LEAD_AI_DISABLE_AUTH) {
+    const demoDownload = await buildDemoExportDownload(exportId);
+
+    if (!demoDownload) {
+      return NextResponse.json({ error: "Export not ready" }, { status: 404 });
+    }
+
+    return new NextResponse(demoDownload.buffer, {
+      headers: {
+        "content-type": demoDownload.contentType,
+        "content-disposition": `attachment; filename="${demoDownload.fileName}"`
+      }
+    });
+  }
+
   const exportRecord = await getExportRecord(session.user.id, exportId);
 
   if (!exportRecord?.storageKey) {

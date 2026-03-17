@@ -27,9 +27,11 @@ const navigation = [
 
 export function LeadAppShell({
   children,
+  authDisabled,
   user
 }: {
   children: React.ReactNode;
+  authDisabled: boolean;
   user: {
     name?: string | null;
     email?: string | null;
@@ -51,9 +53,11 @@ export function LeadAppShell({
             </div>
           </div>
           <div className="mt-8 rounded-[28px] border border-white/10 bg-white/[0.03] p-5">
-            <Badge variant="accent">Compliance-first</Badge>
+            <Badge variant="accent">{authDisabled ? "Demo mode" : "Compliance-first"}</Badge>
             <p className="mt-4 text-sm leading-7 text-slate-300">
-              Search public business sources, inspect visible website signals, and keep every field tied to evidence.
+              {authDisabled
+                ? "Authentication is temporarily disabled so you can explore the product instantly. Search, results, campaigns, settings, and exports run on demo data."
+                : "Search public business sources, inspect visible website signals, and keep every field tied to evidence."}
             </p>
           </div>
           <nav className="mt-8 space-y-2">
@@ -90,14 +94,20 @@ export function LeadAppShell({
                 <p className="text-xs text-slate-400">{user.email}</p>
               </div>
             </div>
-            <Button
-              variant="secondary"
-              className="mt-4 w-full justify-between"
-              onClick={() => signOut({ callbackUrl: "/auth/login" })}
-            >
-              Sign out
-              <LogOut className="h-4 w-4" />
-            </Button>
+            {authDisabled ? (
+              <div className="mt-4 rounded-2xl border border-cyan-400/20 bg-cyan-400/10 px-4 py-3 text-sm text-cyan-100">
+                Demo workspace unlocked
+              </div>
+            ) : (
+              <Button
+                variant="secondary"
+                className="mt-4 w-full justify-between"
+                onClick={() => signOut({ callbackUrl: "/auth/login" })}
+              >
+                Sign out
+                <LogOut className="h-4 w-4" />
+              </Button>
+            )}
           </div>
         </aside>
 

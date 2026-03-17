@@ -1,12 +1,30 @@
 import type { ExportFormat } from "@prisma/client";
 
 import { prisma } from "@/lib/db";
+import { env } from "@/lib/env";
 import type { ParsedSearchIntent, SearchProgressSnapshot } from "@/modules/lead-ai/contracts";
+import {
+  createDemoCampaign,
+  createDemoExportRecord,
+  createDemoLeadList,
+  createDemoSearchId,
+  getDemoCampaignsData,
+  getDemoDashboardData,
+  getDemoExportRecord,
+  getDemoLeadDetail,
+  getDemoSearchDetail,
+  getDemoSettingsData,
+  updateDemoSettingsData
+} from "@/modules/lead-ai/demo-mode";
 import { slugify } from "@/modules/lead-ai/helpers";
 import { parsePromptToIntent } from "@/modules/lead-ai/prompt-parser";
 import { enqueueExport, enqueueSearch } from "@/modules/lead-ai/runtime";
 
 export async function getDashboardData(userId: string) {
+  if (env.LEAD_AI_DISABLE_AUTH) {
+    return getDemoDashboardData();
+  }
+
   const [searches, campaigns, lists, exports, leadCount] = await Promise.all([
     prisma.search.findMany({
       where: { userId },
@@ -78,6 +96,13 @@ export async function createSearch(
     intent?: ParsedSearchIntent;
   }
 ) {
+  if (env.LEAD_AI_DISABLE_AUTH) {
+    return {
+      id: createDemoSearchId(input.rawPrompt),
+      status: "COMPLETE"
+    };
+  }
+
   const intent = input.intent ?? (await parsePromptToIntent({ rawPrompt: input.rawPrompt }));
 
   const search = await prisma.search.create({
@@ -125,6 +150,10 @@ export async function createSearch(
 }
 
 export async function getSearchDetail(userId: string, searchId: string) {
+  if (env.LEAD_AI_DISABLE_AUTH) {
+    return getDemoSearchDetail(searchId);
+  }
+
   return prisma.search.findFirst({
     where: {
       id: searchId,
@@ -160,6 +189,22 @@ export async function getSearchProgress(
   userId: string,
   searchId: string
 ): Promise<SearchProgressSnapshot | null> {
+  if (env.LEAD_AI_DISABLE_AUTH) {
+    const search = await getDemoSearchDetail(searchId);
+
+    return {
+      id: search.id,
+      status: search.status,
+      progressPercent: search.progressPercent,
+      currentMessage: search.currentMessage,
+      summary: search.summary,
+      jobs: search.jobs.map((job) => ({
+        ...job,
+        updatedAt: job.updatedAt.toISOString()
+      }))
+    };
+  }
+
   const search = await prisma.search.findFirst({
     where: {
       id: searchId,
@@ -197,6 +242,10 @@ export async function getSearchProgress(
 }
 
 export async function getLeadDetail(userId: string, leadId: string) {
+  if (env.LEAD_AI_DISABLE_AUTH) {
+    return getDemoLeadDetail(leadId);
+  }
+
   return prisma.lead.findFirst({
     where: {
       id: leadId,
@@ -238,6 +287,10 @@ export async function createCampaign(
     searchId?: string;
   }
 ) {
+  if (env.LEAD_AI_DISABLE_AUTH) {
+    return createDemoCampaign(input);
+  }
+
   return prisma.campaign.create({
     data: {
       userId,
@@ -265,6 +318,10 @@ export async function createLeadList(
     searchId?: string;
   }
 ) {
+  if (env.LEAD_AI_DISABLE_AUTH) {
+    return createDemoLeadList(input);
+  }
+
   return prisma.leadList.create({
     data: {
       userId,
@@ -284,6 +341,10 @@ export async function createLeadList(
 }
 
 export async function getCampaignsData(userId: string) {
+  if (env.LEAD_AI_DISABLE_AUTH) {
+    return getDemoCampaignsData();
+  }
+
   return prisma.campaign.findMany({
     where: { userId },
     orderBy: { updatedAt: "desc" },
@@ -298,6 +359,10 @@ export async function getCampaignsData(userId: string) {
 }
 
 export async function getSettingsData(userId: string) {
+  if (env.LEAD_AI_DISABLE_AUTH) {
+    return getDemoSettingsData();
+  }
+
   const settings = await prisma.leadSettings.findUnique({
     where: { userId }
   });
@@ -340,6 +405,10 @@ export async function updateSettingsData(
     exportDefaults: Record<string, string | boolean>;
   }
 ) {
+  if (env.LEAD_AI_DISABLE_AUTH) {
+    return updateDemoSettingsData(input);
+  }
+
   return prisma.leadSettings.upsert({
     where: { userId },
     update: input,
@@ -360,6 +429,10 @@ export async function createExportRecord(
     fileName: string;
   }
 ) {
+  if (env.LEAD_AI_DISABLE_AUTH) {
+    return createDemoExportRecord(input);
+  }
+
   const exportRecord = await prisma.export.create({
     data: {
       userId,
@@ -376,6 +449,10 @@ export async function createExportRecord(
 }
 
 export async function getExportRecord(userId: string, exportId: string) {
+  if (env.LEAD_AI_DISABLE_AUTH) {
+    return getDemoExportRecord(exportId);
+  }
+
   return prisma.export.findFirst({
     where: {
       id: exportId,

@@ -1,8 +1,16 @@
+import { redirect } from "next/navigation";
+
+import { env } from "@/lib/env";
+
 export default function AuthLayout({
   children
 }: {
   children: React.ReactNode;
 }) {
+  if (env.LEAD_AI_DISABLE_AUTH) {
+    redirect("/app");
+  }
+
   return (
     <div className="min-h-screen bg-[#040a14] px-5 py-10 sm:px-6">
       <div className="mx-auto grid min-h-[calc(100vh-5rem)] max-w-6xl overflow-hidden rounded-[32px] border border-white/10 bg-[#07111f] shadow-[0_30px_100px_-48px_rgba(15,23,42,0.65)] lg:grid-cols-[0.95fr_1.05fr]">

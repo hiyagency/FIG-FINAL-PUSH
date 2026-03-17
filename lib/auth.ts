@@ -7,6 +7,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 import { prisma } from "@/lib/db";
 import { env } from "@/lib/env";
+import { getDemoSession, isAuthDisabled } from "@/modules/lead-ai/demo-mode";
 
 const providers: NextAuthOptions["providers"] = [
   CredentialsProvider({
@@ -89,5 +90,9 @@ export const authOptions: NextAuthOptions = {
 };
 
 export function getServerAuthSession() {
+  if (isAuthDisabled()) {
+    return Promise.resolve(getDemoSession());
+  }
+
   return getServerSession(authOptions);
 }

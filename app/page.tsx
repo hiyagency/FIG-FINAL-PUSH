@@ -529,29 +529,29 @@ export default function HomePage() {
                     </p>
                   </div>
 
-                    <div id="leadership" className="grid gap-4 md:grid-cols-2">
+                    <div id="leadership" className="grid gap-5 md:grid-cols-2">
                       {leadershipTeam.map((leader) => (
-                        <div key={leader.name} className="panel p-6">
-                          <div className="flex items-start gap-4">
-                            <div className="relative h-16 w-16 overflow-hidden rounded-2xl border border-[#D4AF37]/20 bg-[#fff8e5]">
+                        <div key={leader.name} className="panel p-7 sm:p-8">
+                          <div className="flex items-start gap-5">
+                            <div className="relative h-24 w-24 overflow-hidden rounded-2xl border border-[#D4AF37]/20 bg-[#fff8e5]">
                               <Image
                                 src={leader.imageSrc}
                                 alt={leader.imageAlt}
                                 fill
-                                sizes="64px"
+                                sizes="96px"
                                 className="object-cover"
                               />
                             </div>
                             <div>
-                              <p className="text-xl font-semibold text-[#08152f]">
+                              <p className="text-2xl font-semibold text-[#08152f]">
                                 {leader.name}
                             </p>
-                            <p className="mt-1 text-sm font-medium text-[#8c6a10]">
+                            <p className="mt-2 text-base font-medium text-[#8c6a10]">
                               {leader.role}
                             </p>
                           </div>
                         </div>
-                        <p className="mt-5 text-sm leading-7 text-slate-600">
+                        <p className="mt-6 text-base leading-8 text-slate-600">
                           {leader.description}
                         </p>
                       </div>

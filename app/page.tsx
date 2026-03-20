@@ -529,33 +529,63 @@ export default function HomePage() {
                     </p>
                   </div>
 
-                    <div id="leadership" className="grid gap-4 md:grid-cols-2">
+                  <div
+                    id="leadership"
+                    className="rounded-[34px] border border-[#D4AF37]/25 bg-white px-5 py-7 shadow-[0_22px_64px_rgba(8,21,47,0.08)] sm:px-8 sm:py-10 lg:px-10 lg:py-12"
+                  >
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8c6a10]">
+                      Leadership
+                    </p>
+                    <h3 className="mt-3 text-3xl font-semibold tracking-tight text-[#08152f] sm:text-4xl">
+                      Meet the People Behind FIG
+                    </h3>
+                    <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">
+                      Trusted leadership, structured guidance, and local accessibility remain
+                      central to how FIG supports each client conversation.
+                    </p>
+
+                    <div className="mt-8 grid gap-6 lg:grid-cols-2">
                       {leadershipTeam.map((leader) => (
-                        <div key={leader.name} className="panel p-6">
-                          <div className="flex items-start gap-4">
-                            <div className="relative h-16 w-16 overflow-hidden rounded-2xl border border-[#D4AF37]/20 bg-[#fff8e5]">
+                        <article
+                          key={leader.name}
+                          className="h-full rounded-[28px] border border-[#D4AF37]/20 bg-gradient-to-b from-[#fffdf8] to-white p-6 shadow-[0_16px_38px_rgba(8,21,47,0.08)] transition-transform duration-300 hover:-translate-y-1 sm:p-8"
+                        >
+                          <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
+                            <div className="relative h-32 w-32 overflow-hidden rounded-3xl border border-[#D4AF37]/20 bg-[#fff8e5] sm:h-36 sm:w-36">
                               <Image
                                 src={leader.imageSrc}
                                 alt={leader.imageAlt}
                                 fill
-                                sizes="64px"
+                                sizes="(min-width: 640px) 144px, 128px"
                                 className="object-cover"
                               />
                             </div>
-                            <div>
-                              <p className="text-xl font-semibold text-[#08152f]">
+
+                            <div className="flex-1">
+                              <p className="text-2xl font-semibold text-[#08152f]">
                                 {leader.name}
-                            </p>
-                            <p className="mt-1 text-sm font-medium text-[#8c6a10]">
-                              {leader.role}
-                            </p>
+                              </p>
+                              <p className="mt-2 text-base font-medium text-[#8c6a10]">
+                                {leader.role}
+                              </p>
+                              <div className="mt-4 h-1 w-14 rounded-full bg-[#D4AF37]/45" />
+                              <p className="mt-5 max-w-[44ch] text-base leading-8 text-slate-600">
+                                {leader.description}
+                              </p>
+
+                              <ul className="mt-5 space-y-2 text-sm text-slate-700">
+                                {leader.trustPoints.map((point) => (
+                                  <li key={point} className="flex items-center gap-2">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-[#D4AF37]" />
+                                    <span>{point}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
                           </div>
-                        </div>
-                        <p className="mt-5 text-sm leading-7 text-slate-600">
-                          {leader.description}
-                        </p>
-                      </div>
-                    ))}
+                        </article>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </Reveal>

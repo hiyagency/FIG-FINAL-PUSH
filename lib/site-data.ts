@@ -107,7 +107,7 @@ export const leadershipTeam = [
     imageSrc: "/fig/leadership/ashish-dwivedi.jpeg",
     imageAlt: "Ashish Dwivedi, Chairman and Managing Director of Financial Investment Group",
     description:
-      "Ashish Dwivedi leads FIG with a direct, relationship-led approach that builds trust through disciplined communication and dependable local accessibility for clients.",
+      "Ashish Dwivedi leads FIG with a relationship-first style focused on trust, disciplined communication, and dependable local support.",
     trustPoints: [
       "Client-first communication",
       "Local accessibility",
@@ -120,7 +120,7 @@ export const leadershipTeam = [
     imageSrc: "/fig/leadership/hivani-dubey.jpeg",
     imageAlt: "Shivani Dubey, CEO of Financial Investment Group",
     description:
-      "Shivani Dubey strengthens FIG's service quality with attentive client engagement and consistent follow-through across the full investment enquiry experience.",
+      "Shivani Dubey ensures service quality through responsive client engagement and consistent follow-through across each enquiry journey.",
     trustPoints: [
       "Service consistency",
       "Responsive engagement",

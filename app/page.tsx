@@ -512,84 +512,85 @@ export default function HomePage() {
               </Reveal>
 
               <Reveal delay={0.08}>
-                <div className="grid gap-6">
-                  <div className="panel-dark p-6 sm:p-8">
-                    <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#f8dd89]">
-                      Mission
-                    </p>
-                    <h2 className="mt-4 text-3xl font-semibold leading-tight text-white">
-                      To help individuals and families build sustainable wealth
-                      and financial independence through disciplined investment
-                      strategies.
-                    </h2>
-                    <p className="mt-4 text-sm leading-7 text-white/72">
-                      FIG positions its service around consistent communication,
-                      structured plan choices, and long-term financial planning
-                      intent rather than high-pressure selling.
-                    </p>
-                  </div>
-
-                  <div
-                    id="leadership"
-                    className="rounded-[34px] border border-[#D4AF37]/25 bg-white px-5 py-7 shadow-[0_22px_64px_rgba(8,21,47,0.08)] sm:px-8 sm:py-10 lg:px-10 lg:py-12"
-                  >
-                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8c6a10]">
-                      Leadership
-                    </p>
-                    <h3 className="mt-3 text-3xl font-semibold tracking-tight text-[#08152f] sm:text-4xl">
-                      Meet the People Behind FIG
-                    </h3>
-                    <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">
-                      Trusted leadership, structured guidance, and local accessibility remain
-                      central to how FIG supports each client conversation.
-                    </p>
-
-                    <div className="mt-8 grid gap-6 lg:grid-cols-2">
-                      {leadershipTeam.map((leader) => (
-                        <article
-                          key={leader.name}
-                          className="h-full rounded-[28px] border border-[#D4AF37]/20 bg-gradient-to-b from-[#fffdf8] to-white p-6 shadow-[0_16px_38px_rgba(8,21,47,0.08)] transition-transform duration-300 hover:-translate-y-1 sm:p-8"
-                        >
-                          <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
-                            <div className="relative h-32 w-32 overflow-hidden rounded-3xl border border-[#D4AF37]/20 bg-[#fff8e5] sm:h-36 sm:w-36">
-                              <Image
-                                src={leader.imageSrc}
-                                alt={leader.imageAlt}
-                                fill
-                                sizes="(min-width: 640px) 144px, 128px"
-                                className="object-cover"
-                              />
-                            </div>
-
-                            <div className="flex-1">
-                              <p className="text-2xl font-semibold text-[#08152f]">
-                                {leader.name}
-                              </p>
-                              <p className="mt-2 text-base font-medium text-[#8c6a10]">
-                                {leader.role}
-                              </p>
-                              <div className="mt-4 h-1 w-14 rounded-full bg-[#D4AF37]/45" />
-                              <p className="mt-5 max-w-[44ch] text-base leading-8 text-slate-600">
-                                {leader.description}
-                              </p>
-
-                              <ul className="mt-5 space-y-2 text-sm text-slate-700">
-                                {leader.trustPoints.map((point) => (
-                                  <li key={point} className="flex items-center gap-2">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-[#D4AF37]" />
-                                    <span>{point}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          </div>
-                        </article>
-                      ))}
-                    </div>
-                  </div>
+                <div className="panel-dark p-6 sm:p-8">
+                  <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#f8dd89]">
+                    Mission
+                  </p>
+                  <h2 className="mt-4 text-3xl font-semibold leading-tight text-white">
+                    To help individuals and families build sustainable wealth
+                    and financial independence through disciplined investment
+                    strategies.
+                  </h2>
+                  <p className="mt-4 text-sm leading-7 text-white/72">
+                    FIG positions its service around consistent communication,
+                    structured plan choices, and long-term financial planning
+                    intent rather than high-pressure selling.
+                  </p>
                 </div>
               </Reveal>
             </div>
+
+            <Reveal delay={0.14}>
+              <div
+                id="leadership"
+                className="mx-auto mt-12 w-full max-w-[1200px] rounded-[36px] border border-[#D4AF37]/20 bg-white px-5 py-10 shadow-[0_24px_70px_rgba(8,21,47,0.08)] sm:px-8 lg:px-12 lg:py-14"
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8c6a10]">
+                  Leadership
+                </p>
+                <h3 className="mt-3 text-3xl font-semibold tracking-tight text-[#08152f] sm:text-4xl">
+                  Meet the People Behind FIG
+                </h3>
+                <p className="mt-4 max-w-3xl text-base leading-8 text-slate-600">
+                  Trusted guidance and local accessibility shape how FIG supports every
+                  client conversation with clarity and consistency.
+                </p>
+
+                <div className="mt-10 space-y-10 sm:space-y-14">
+                  {leadershipTeam.map((leader, index) => (
+                    <article
+                      key={leader.name}
+                      className={`group flex items-center gap-6 rounded-[30px] bg-[#fffdf8] p-4 shadow-[0_12px_40px_rgba(8,21,47,0.08)] sm:p-6 lg:gap-12 lg:p-8 ${
+                        index % 2 === 1 ? "lg:flex-row-reverse" : "lg:flex-row"
+                      } flex-col`}
+                    >
+                      <div className="relative w-full overflow-hidden rounded-2xl shadow-[0_16px_36px_rgba(8,21,47,0.15)] lg:w-[320px] xl:w-[350px]">
+                        <div className="relative aspect-[4/5]">
+                          <Image
+                            src={leader.imageSrc}
+                            alt={leader.imageAlt}
+                            fill
+                            sizes="(min-width: 1280px) 350px, (min-width: 1024px) 320px, 100vw"
+                            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex-1 px-1 sm:px-2 lg:px-4">
+                        <p className="text-3xl font-semibold leading-tight text-[#08152f] sm:text-[2rem]">
+                          {leader.name}
+                        </p>
+                        <p className="mt-2 text-base font-medium text-[#8c6a10]">
+                          {leader.role}
+                        </p>
+                        <p className="mt-5 max-w-[60ch] text-base leading-8 text-slate-600">
+                          {leader.description}
+                        </p>
+
+                        <ul className="mt-6 grid gap-3 text-sm text-slate-700 sm:grid-cols-2">
+                          {leader.trustPoints.map((point) => (
+                            <li key={point} className="flex items-center gap-2">
+                              <span className="h-1.5 w-1.5 rounded-full bg-[#D4AF37]" />
+                              <span>{point}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
           </div>
         </section>
 

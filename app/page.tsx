@@ -26,7 +26,7 @@ import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { cn, formatCurrency, getSiteUrl } from "@/lib/fig-utils";
+import { cn, getSiteUrl } from "@/lib/fig-utils";
 import {
   businessInfo,
   consultationSteps,
@@ -35,7 +35,6 @@ import {
   leadershipTeam,
   mouDocumentPoints,
   mouOverviewCards,
-  planSchedule,
   whyChooseFig
 } from "@/lib/site-data";
 
@@ -125,19 +124,7 @@ export default function HomePage() {
     ],
     slogan: "Structured investment plans designed for regular income and long-term financial growth.",
     description:
-      "Financial Investment Group (FIG) provides structured investment opportunities designed to support long-term financial growth and regular income-oriented planning.",
-    hasOfferCatalog: {
-      "@type": "OfferCatalog",
-      name: "Structured Income Plans",
-      itemListElement: planSchedule.map((plan) => ({
-        "@type": "Offer",
-        itemOffered: {
-          "@type": "Service",
-          name: `${plan.label} structured income plan`,
-          description: `Illustrative schedule with weekly ${formatCurrency(plan.weekly)}, monthly ${formatCurrency(plan.monthly)}, and yearly ${formatCurrency(plan.yearly)} figures.`
-        }
-      }))
-    }
+      "Financial Investment Group (FIG) provides structured investment opportunities designed to support long-term financial growth and regular income-oriented planning."
   };
 
   const websiteSchema = {
@@ -408,83 +395,53 @@ export default function HomePage() {
           <div className="container-shell">
             <SectionHeading
               eyebrow="Investment plans"
-              title="A Structured Income Plan for Everyone"
-              description="The plan schedule below is presented from the information shared by FIG. Clients should review eligibility, documentation, and suitability directly with the team before proceeding."
+              title="Contact FIG on WhatsApp for Current Pricing"
+              description="Plan details and pricing are shared directly by the FIG team after an enquiry, so clients can discuss eligibility, documentation, and suitability before proceeding."
             />
 
             <div className="mt-10 overflow-hidden rounded-[32px] border border-white/70 bg-white shadow-[0_32px_80px_-46px_rgba(15,23,42,0.45)]">
-              <div className="border-b border-slate-200 bg-[#0B1F4B] px-5 py-5 text-white sm:px-8">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#f8dd89]">
-                      Current schedule
-                    </p>
-                    <h2 className="mt-1 text-2xl font-semibold">
-                      Investment plan comparison
-                    </h2>
-                  </div>
-                  <p className="max-w-xl text-sm leading-6 text-white/75">
-                    Weekly, monthly, and yearly figures are shown as plan
-                    illustrations for consultation purposes.
+              <div className="grid gap-0 lg:grid-cols-[0.9fr_1.1fr]">
+                <div className="bg-[#0B1F4B] p-6 text-white sm:p-8">
+                  <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#f8dd89]">
+                    Price enquiry
+                  </p>
+                  <h2 className="mt-3 text-3xl font-semibold">
+                    Get plan pricing directly from the FIG team.
+                  </h2>
+                  <p className="mt-4 text-sm leading-7 text-white/75">
+                    Public schedule details have been removed from the website.
+                    For updated pricing, investment options, and consultation
+                    steps, send a WhatsApp enquiry to FIG.
                   </p>
                 </div>
-              </div>
 
-              <div className="hidden overflow-x-auto md:block">
-                <table className="min-w-full border-separate border-spacing-0 text-left">
-                  <thead className="bg-[#fff8e5] text-sm font-semibold text-[#08152f]">
-                    <tr>
-                      <th className="px-8 py-4">Investment</th>
-                      <th className="px-8 py-4">Weekly</th>
-                      <th className="px-8 py-4">Monthly</th>
-                      <th className="px-8 py-4">Yearly</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {planSchedule.map((plan, index) => (
-                      <tr
-                        key={plan.label}
-                        className={cn(
-                          "text-[15px] text-slate-700",
-                          index % 2 === 0 ? "bg-white" : "bg-[#fcfaf4]"
-                        )}
-                      >
-                        <td className="px-8 py-5 font-semibold text-[#08152f]">
-                          {plan.label}
-                        </td>
-                        <td className="px-8 py-5">{formatCurrency(plan.weekly)}</td>
-                        <td className="px-8 py-5">{formatCurrency(plan.monthly)}</td>
-                        <td className="px-8 py-5">{formatCurrency(plan.yearly)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              <div className="grid gap-4 p-4 md:hidden">
-                {planSchedule.map((plan) => (
-                  <div key={plan.label} className="rounded-[24px] border border-slate-200 bg-[#fcfaf4] p-5">
-                    <div className="flex items-center justify-between gap-4">
-                      <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8c6a10]">
-                          Plan amount
-                        </p>
-                        <h3 className="mt-1 text-2xl font-semibold text-[#08152f]">
-                          {plan.label}
-                        </h3>
-                      </div>
-                      <span className="rounded-full border border-[#D4AF37]/35 bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-[#8c6a10]">
-                        FIG
-                      </span>
-                    </div>
-
-                    <div className="mt-5 grid gap-3">
-                      <PlanRow label="Weekly schedule" value={formatCurrency(plan.weekly)} />
-                      <PlanRow label="Monthly schedule" value={formatCurrency(plan.monthly)} />
-                      <PlanRow label="Yearly schedule" value={formatCurrency(plan.yearly)} />
-                    </div>
+                <div className="flex flex-col justify-center gap-5 p-6 sm:p-8">
+                  <div className="rounded-[24px] border border-[#D4AF37]/30 bg-[#fff8e5] p-5">
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8c6a10]">
+                      WhatsApp inquiry
+                    </p>
+                    <p className="mt-3 text-lg font-semibold leading-8 text-[#08152f]">
+                      Contact us through WhatsApp for inquiry of prices and
+                      available investment plan details.
+                    </p>
                   </div>
-                ))}
+
+                  <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                    <a
+                      href={businessInfo.whatsAppHref}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="button-primary"
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      Ask on WhatsApp
+                    </a>
+                    <a href={businessInfo.primaryPhone.href} className="button-secondary">
+                      <PhoneCall className="h-4 w-4" />
+                      Call FIG
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -505,7 +462,7 @@ export default function HomePage() {
 
                   <div className="mt-8 grid gap-5 md:grid-cols-3">
                     <InfoTile title="Financial consultation in Burhar" value="Serving Shahdol district with on-ground conversations, local accessibility, and direct support." />
-                    <InfoTile title="Savings and plan guidance" value="Simple investment slabs with clear schedule illustrations for people comparing structured plans." />
+                    <InfoTile title="Savings and plan guidance" value="Direct WhatsApp and phone enquiries help people understand current plan details, documentation, and suitability before moving ahead." />
                     <InfoTile title="NIC classification" value="Registered under NIC Code 66309 for management of other investment funds." />
                   </div>
                 </div>
@@ -1160,21 +1117,6 @@ function MetricCard({
     <div className="rounded-[20px] border border-slate-200 bg-[#fcfaf4] p-4">
       <p className="text-lg font-semibold text-[#08152f]">{value}</p>
       <p className="mt-1 text-sm leading-6 text-slate-600">{label}</p>
-    </div>
-  );
-}
-
-function PlanRow({
-  label,
-  value
-}: {
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="flex items-center justify-between gap-4 rounded-2xl border border-white bg-white px-4 py-3">
-      <span className="text-sm text-slate-500">{label}</span>
-      <span className="text-sm font-semibold text-[#08152f]">{value}</span>
     </div>
   );
 }

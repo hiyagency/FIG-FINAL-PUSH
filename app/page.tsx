@@ -401,11 +401,11 @@ export default function HomePage() {
 
             <div className="mt-10 overflow-hidden rounded-[32px] border border-white/70 bg-white shadow-[0_32px_80px_-46px_rgba(15,23,42,0.45)]">
               <div className="grid gap-0 lg:grid-cols-[0.9fr_1.1fr]">
-                <div className="bg-[#0B1F4B] p-6 text-white sm:p-8">
+                <div className="flex flex-col justify-center bg-[#0B1F4B] p-6 text-white sm:p-8 lg:p-10">
                   <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#f8dd89]">
                     Price enquiry
                   </p>
-                  <h2 className="mt-3 text-3xl font-semibold">
+                  <h2 className="mt-3 text-3xl font-semibold leading-tight">
                     Get plan pricing directly from the FIG team.
                   </h2>
                   <p className="mt-4 text-sm leading-7 text-white/75">
@@ -413,20 +413,18 @@ export default function HomePage() {
                     For updated pricing, investment options, and consultation
                     steps, send a WhatsApp enquiry to FIG.
                   </p>
-                </div>
 
-                <div className="flex flex-col justify-center gap-5 p-6 sm:p-8">
-                  <div className="rounded-[24px] border border-[#D4AF37]/30 bg-[#fff8e5] p-5">
-                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#8c6a10]">
+                  <div className="mt-6 rounded-[24px] border border-[#D4AF37]/30 bg-white/8 p-5">
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#f8dd89]">
                       WhatsApp inquiry
                     </p>
-                    <p className="mt-3 text-lg font-semibold leading-8 text-[#08152f]">
+                    <p className="mt-3 text-lg font-semibold leading-8 text-white">
                       Contact us through WhatsApp for inquiry of prices and
                       available investment plan details.
                     </p>
                   </div>
 
-                  <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                  <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                     <a
                       href={businessInfo.whatsAppHref}
                       target="_blank"
@@ -440,6 +438,19 @@ export default function HomePage() {
                       <PhoneCall className="h-4 w-4" />
                       Call FIG
                     </a>
+                  </div>
+                </div>
+
+                <div className="bg-[#f8fafc] p-4 sm:p-6 lg:p-8">
+                  <div className="mx-auto max-w-[520px] overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-[0_22px_54px_-36px_rgba(15,23,42,0.65)]">
+                    <Image
+                      src="/fig/public-notice.jpeg"
+                      alt="Financial Investment Group important public notice"
+                      width={1024}
+                      height={1536}
+                      className="h-auto w-full"
+                      sizes="(min-width: 1024px) 520px, calc(100vw - 64px)"
+                    />
                   </div>
                 </div>
               </div>
